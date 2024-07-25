@@ -6,39 +6,43 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:16 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 11:29:22 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:12:59 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-void	Server::_ClientRequest(int i)
+void Server::_ClientRequest(int i)
 {
-	char buf[6000];
-	int sender_fd = this->_pfds[i].fd;
-	int nbytes = recv(sender_fd, buf, sizeof(buf), 0);
+    char buf[6000];
+    int sender_fd = this->_pfds[i].fd;
+    int nbytes = recv(sender_fd, buf, sizeof(buf), 0);
 
-	if (nbytes <= 0)
-	{
-		if (nbytes == 0)
-			std::cout << "[" << currentDateTime() << "]: socket " << sender_fd << " hung up" << std::endl;
-		else
-			std::cout << "recv() error: " << strerror(errno) << std::endl;
+    if (nbytes <= 0)
+    {
+        if (nbytes == 0)
+            std::cout << "[" << currentDateTime() << "]: socket " << sender_fd << " hung up" << std::endl;
+        else
+            std::cout << "recv() error: " << strerror(errno) << std::endl;
 
-		close(sender_fd);
-		_removeFromPoll(i);
-	}
-	else
-	{
-		std::string message(buf, strlen(buf) - 1);
-		if (message.back() == '\r')
-			message.erase(message.end() - 1);
-		std::string ret = _parsing(message, this->_pfds[i].fd);
-		if (send(sender_fd, ret.c_str(), ret.length(), 0) == -1)
-			std::cout << "send() error: " << strerror(errno) << std::endl;
-	}
-	memset(&buf, 0, 6000);
-};
+        close(sender_fd);
+        _removeFromPoll(i);
+    }
+    else
+    {
+        std::string message(buf, strlen(buf) - 1);
+        
+        // Check if the last character is '\r' and remove it
+        if (!message.empty() && message[message.size() - 1] == '\r')
+            message.erase(message.size() - 1);
+
+        std::string ret = _parsing(message, this->_pfds[i].fd);
+        if (send(sender_fd, ret.c_str(), ret.length(), 0) == -1)
+            std::cout << "send() error: " << strerror(errno) << std::endl;
+    }
+    memset(&buf, 0, sizeof(buf));
+}
+
 
 Request	Server::_splitRequest(std::string req)
 {

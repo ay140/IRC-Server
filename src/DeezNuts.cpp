@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:35 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 11:10:41 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:14:11 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ std::string	Server::_DeezNuts( Request req, int i )
 		else if (req.args[0] == "1")
 			return (this->_clients[i]->getAllChannels());
 		else if (req.args[0] == "2")
-			return ("Online Users: " + std::to_string(this->_online_c - 1) + "\n");
+			return ("Online Users: " + to_string(this->_online_c - 1) + "\n");
 		else if (req.args[0] == "3")
 			return (_listAllChannels());
 		else if (req.args[0] == "4")
@@ -76,9 +76,9 @@ std::string	Server::_DeezNuts( Request req, int i )
 std::string Server::_serverInfo() const
 {
 	std::string server("Server Name: " + this->_name + "\n");
-	server.append("Online Users: " + std::to_string(this->_online_c - 1) + "\n");
-	server.append("Max Online Users: " + std::to_string(this->_max_online_c) + "\n");
-	server.append("Number of Channels in the Server: " + std::to_string(this->_allChannels.size()) + "\n");
+	server.append("Online Users: " + to_string(this->_online_c - 1) + "\n");
+	server.append("Max Online Users: " + to_string(this->_max_online_c) + "\n");
+	server.append("Number of Channels in the Server: " + to_string(this->_allChannels.size()) + "\n");
 	return (server);
 }
 
@@ -92,7 +92,7 @@ std::string Server::_channelInfo(std::string ChannelName, int i)
 			std::string Info;
 			Info.append("Channel Name: " + it->second->getName() + "\n");
 			Info.append("Channel Creator: " + it->second->getCreator()->getFullName() + "\n");
-			Info.append("Online Users: " + std::to_string(it->second->getOnlineUsers()) + "\n");
+			Info.append("Online Users: " + to_string(it->second->getOnlineUsers()) + "\n");
 			Info.append("Channel Topic: " + it->second->getTopic() + "\n");
 			return (Info);
 		}
@@ -114,7 +114,7 @@ std::string	Server::_listAllChannels() const
 	{
 		channels.append("█              █              █                    █                                  █\n");
 		channels.append("█ " RESET + fillIt(it->first, 12));
-		channels.append(YELLOW " █      " RESET + fillIt(std::to_string(it->second->getOnlineUsers()), 7));
+		channels.append(YELLOW " █      " RESET + fillIt(to_string(it->second->getOnlineUsers()), 7));
 		channels.append(YELLOW " █ " RESET + fillIt(it->second->getCreator()->getFullName(), 18));
 		channels.append(YELLOW " █ " RESET + fillIt(it->second->getTopic(), 32));
 		channels.append(YELLOW " █\n");

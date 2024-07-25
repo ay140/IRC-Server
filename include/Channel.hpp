@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 10:56:36 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:02:20 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 #define BADCHANMASK 9
 #define USERNOTINCHANNEL -1
 #define USERNOTFOUND -1
-
 
 
 #include "Server.hpp"

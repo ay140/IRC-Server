@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:45 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 11:09:55 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:09:48 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ std::string	Client::getUserInfo() const
 	userInfo.append("Full Name: " + this->_FullName + "\n");
 	userInfo.append("Nick Name: " + this->_NickName + "\n");
 	userInfo.append("Host: " + this->_Host + "\n");
-	userInfo.append("Joined Channels: " + std::to_string(this->_joinedChannels.size()) + "\n");
+	userInfo.append("Joined Channels: " + to_string(this->_joinedChannels.size()) + "\n");
 	userInfo.append("\n");
 	return (userInfo);
 };
@@ -172,7 +172,7 @@ std::string	Client::getAllChannels() const
 	{
 		channels.append("█              █              █                    █                                  █\n");
 		channels.append("█ " RESET + fillIt(it->first, 12));
-		channels.append(YELLOW " █      " RESET + fillIt(std::to_string(it->second->getOnlineUsers()), 7));
+		channels.append(YELLOW " █      " RESET + fillIt(to_string(it->second->getOnlineUsers()), 7));
 		channels.append(YELLOW " █ " RESET + fillIt(it->second->getCreator()->getFullName(), 18));
 		channels.append(YELLOW " █ " RESET + fillIt(it->second->getTopic(), 32));
 		channels.append(YELLOW " █\n");

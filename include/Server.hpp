@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 10:58:54 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:12:02 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 #include <netdb.h>
 #include <poll.h>
 #include <time.h>
+#include <sstream>
+#include <fstream>
 
 class Client;
 class Channel;
@@ -112,7 +114,13 @@ class Server
 		void	startServer(void);
 };
 
-
+template <typename T>
+std::string to_string(T value) 
+{
+    std::ostringstream oss;
+    oss << value;
+    return oss.str();
+}
 
 #include "Channel.hpp"
 #include "Client.hpp"

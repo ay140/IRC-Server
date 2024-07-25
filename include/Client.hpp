@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 10:57:07 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:02:23 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define CLIENT_HPP
 
 #include "Server.hpp"
+#include <sstream>
+
 
 # define GREEN "\e[1;32m"
 # define RESET "\e[0m"
