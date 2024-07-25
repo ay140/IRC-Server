@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 12:02:20 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:47:14 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ class Channel
 		Channel();
 
 	public:
-		Channel( std::string channelName, Client *Creater );
-		Channel( std::string channelName, std::string channelKey, Client *Creater );
-		Channel( const Channel& x );
+		Channel(const std::string& channelName, Client* creator);
+		Channel(const std::string& channelName, const std::string& channelKey, Client* creator);
+		Channel(const Channel& x);
 		Channel &operator=( const Channel& rhs );
 		~Channel();
 
@@ -66,7 +66,7 @@ class Channel
 
 		Client*						getCreator() const;
 		std::map<int, Client *>		getAllUsers() const;
-		std::pair<Client *, int>	findUserRole( int i );
+		std::pair<Client *, int>	findUserRole( int i ) const;
 		std::string					listAllUsers() const;
 
 
@@ -77,7 +77,7 @@ class Channel
 		int		banUser( Client *member );
 		void	removeOperator( int i );
 		void	removeVoice( int i );
-		void	removeBanned( std::string NickName );
+		void	removeBanned(const std::string& nickName);
 		void	removeMember( int i );
 
 

@@ -3,29 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   messagesHandling.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:27:17 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 11:27:26 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 21:58:44 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-std::string	Server::_welcomemsg(void)
+std::string Server::_welcomemsg(void)
 {
-	std::string welcome = RED;
-	welcome.append("██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
-	welcome.append("██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝\n");
-	welcome.append("██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗\n");
-	welcome.append("██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝\n");
-	welcome.append("╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗\n");
-	welcome.append(" ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝\n");
-	welcome.append(BLUE);
-	welcome.append("You need to login so you can start chatting OR you can send HELP to see how :) \n");
-	welcome.append(RESET);
-	return (welcome);
-};
+    std::string welcome = RED;
+    welcome.append("Welcome to the IRC Server!\n");
+    welcome.append(CYAN);
+    welcome.append("Please login to start chatting, or type HELP for assistance.\n");
+    welcome.append(RESET);
+    return welcome;
+}
 
 int			Server::_sendall(int destfd, std::string message)
 {
@@ -47,7 +42,7 @@ std::string		Server::_sendToAllUsers( Channel *channel, int senderFd, std::strin
 {
 	std::map<int, Client *> allusers = channel->getAllUsers();
 	std::map<int, Client *>::iterator it = allusers.begin();
-	std::string reply = this->_clients[senderFd]->getUserPerfix();
+	std::string reply = this->_clients[senderFd]->getUserPrefix();
 	reply.append(message);
 	while (it != allusers.end())
 	{

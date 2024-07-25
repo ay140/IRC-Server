@@ -3,26 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:49 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 11:29:54 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:33:08 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-std::string fillIt(std::string str, size_t len)
+std::string fillIt(const std::string& str, size_t len) 
 {
-	if (str.length() < len)
-		str.insert(str.end(), len - str.length(), ' ');
-	else
+    std::string result = str;
+    if (result.length() < len) 
 	{
-		str.erase(str.begin() + len - 1, str.end());
-		str.append(".");
-	}
-	return (str);
-};
+        result.insert(result.end(), len - result.length(), ' ');
+    } 
+	else 
+	{
+        result.erase(result.begin() + len - 1, result.end());
+        result.append(".");
+    }
+    return result;
+}
+
 
 const std::string currentDateTime()
 {

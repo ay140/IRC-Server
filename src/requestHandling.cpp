@@ -3,48 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   requestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:16 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 12:12:59 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/26 00:40:31 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-void Server::_ClientRequest(int i)
-{
+void Server::_ClientRequest(int index) {
     char buf[6000];
-    int sender_fd = this->_pfds[i].fd;
-    int nbytes = recv(sender_fd, buf, sizeof(buf), 0);
+    int sender_fd = this->_pfds[index].fd;
+    int nbytes = recv(sender_fd, buf, sizeof(buf) - 1, 0); // -1 to leave space for null-terminator
 
-    if (nbytes <= 0)
-    {
-        if (nbytes == 0)
-            std::cout << "[" << currentDateTime() << "]: socket " << sender_fd << " hung up" << std::endl;
-        else
+    if (nbytes < 0) {
+        if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            // No data available right now, try again later
+            return;
+        } else {
             std::cout << "recv() error: " << strerror(errno) << std::endl;
-
+            close(sender_fd);
+            _removeFromPoll(index);
+        }
+    } else if (nbytes == 0) {
+        std::cout << "[" << currentDateTime() << "]: socket " << sender_fd << " hung up" << std::endl;
         close(sender_fd);
-        _removeFromPoll(i);
-    }
-    else
-    {
-        std::string message(buf, strlen(buf) - 1);
-        
-        // Check if the last character is '\r' and remove it
-        if (!message.empty() && message[message.size() - 1] == '\r')
-            message.erase(message.size() - 1);
+        _removeFromPoll(index);
+    } else {
+        buf[nbytes] = '\0'; // Null-terminate the received data
+        std::string message(buf);
 
-        std::string ret = _parsing(message, this->_pfds[i].fd);
-        if (send(sender_fd, ret.c_str(), ret.length(), 0) == -1)
+        // Remove trailing '\r' or '\n' if present
+        while (!message.empty() && (message.back() == '\r' || message.back() == '\n')) {
+            message.pop_back();
+        }
+        
+        std::string ret = _parsing(message, this->_pfds[index].fd);
+        if (!ret.empty() && send(sender_fd, ret.c_str(), ret.length(), 0) == -1) {
             std::cout << "send() error: " << strerror(errno) << std::endl;
+        }
     }
-    memset(&buf, 0, sizeof(buf));
+    memset(buf, 0, sizeof(buf)); // Clear the buffer
 }
 
 
-Request	Server::_splitRequest(std::string req)
+
+Request	Server::_splitRequest(const std::string& req)
 {
 	Request	request;
 	size_t	i = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 12:02:23 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:38:56 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define YELLOW "\e[1;33m"
 # define PURPLE "\e[1;35m"
 # define BLUE "\e[1;34m"
+# define GRAY "\033[1;2m"
+# define ED "\033[0m"
 
 struct Modes
 {
@@ -36,7 +38,7 @@ struct Modes
 	bool	server;
 };
 
-std::string fillIt(std::string str, size_t len);
+std::string fillIt(const std::string& str, size_t len);
 const std::string	currentDateTime();
 
 class Client
@@ -61,9 +63,9 @@ class Client
 	public:
 		Client();
 		Client( int fd );
-		Client( const Client & x );
+		Client(const Client & x );
 		~Client();
-		Client & operator= ( const Client & rhs );
+		Client & operator= (const Client & rhs );
 
 	public: /*             Getters                         */
 		std::string							getUserName()		const;
@@ -76,7 +78,7 @@ class Client
 		int									getRegistered()		const;
 		int									getisOperator()		const;
 		int									getMode(char mode)	const;
-		std::string							getUserPerfix()		const;
+		std::string							getUserPrefix()		const;
 		std::string							getUserInfo()		const;
 		std::string							getAllChannels()	const;
 		std::map<std::string, Channel *>	getJoinedChannels()	const;
@@ -93,12 +95,12 @@ class Client
 		void			setRegistered(int Registered);
 		void			setIsOperator(int isOperator);
 		void			setMode(int value, char mode);
-		void			joinChannel( std::string ChannelName, Channel *channel );
-		void			leaveChannel( std::string ChannelName );
+		void			joinChannel(const std::string& channelName, Channel *channel );
+		void			leaveChannel(const std::string& channelName);
 		std::string		leaveAllChannels();
 
 	public:
-		int			isJoined( std::string ChannelName ) const;
+		int			isJoined(const std::string& channelName) const;
 
 	public:
 		std::string		JoinedChannels() const;
