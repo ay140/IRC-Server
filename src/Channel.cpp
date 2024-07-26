@@ -6,29 +6,29 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 22:48:01 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 11:27:46 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Channel.hpp"
 
 Channel::Channel()
-    : _prefix(), _creator(NULL), _onlineUsers(0), _name(), _key(), _topic(),
+    : _onlineUsers(0), _prefix(), _creator(NULL), _name(), _key(), _topic(),
       _members(), _operators(), _voice(), _banned() {}
 
 Channel::Channel(const Channel& x)
-    : _prefix(x._prefix), _creator(x._creator), _onlineUsers(x._onlineUsers),
+    : _onlineUsers(x._onlineUsers), _prefix(x._prefix), _creator(x._creator),
       _name(x._name), _key(x._key), _topic(x._topic),
       _members(x._members), _operators(x._operators), _voice(x._voice), _banned(x._banned) {}
 
 Channel::Channel(const std::string& channelName, Client* creator)
-    : _prefix(), _creator(creator), _onlineUsers(1), _name(channelName), _key(), _topic(),
+    : _onlineUsers(1), _prefix(), _creator(creator), _name(channelName), _key(), _topic(),
       _members(), _operators(), _voice(), _banned() {
     this->_operators.insert(std::make_pair(creator->getClientfd(), creator));
 }
 
 Channel::Channel(const std::string& channelName, const std::string& channelKey, Client* creator)
-    : _prefix(), _creator(creator), _onlineUsers(1), _name(channelName), _key(channelKey), _topic(),
+    : _onlineUsers(1), _prefix(), _creator(creator), _name(channelName), _key(channelKey), _topic(),
       _members(), _operators(), _voice(), _banned() {
     this->_operators.insert(std::make_pair(creator->getClientfd(), creator));
 }

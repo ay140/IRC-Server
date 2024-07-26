@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   File.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:57:31 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 10:57:33 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:20:30 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,18 @@
 
 class File
 {
+	private:
+		File();
 	public:
 		std::string	Name;
 		std::string Path;
 		std::string sender;
 		std::string receiver;
 
-	private:
-		File();
-
-	public:
 		File( std::string Name, std::string Path, std::string Sender, std::string Receiver );
-		File( const File &x );
+		File(const File &x);
+		File& operator=(const File &rhs);
 		~File();
-		File & operator = ( const File &rhs );
 };
 
 #endif

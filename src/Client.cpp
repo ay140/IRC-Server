@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:45 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 23:05:43 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 11:25:43 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,38 @@
 
 Client::Client()
     : _clientfd(0), _Auth(false), _Registered(false), _isOperator(false),
-      _NickName(), _UserName(), _FullName(), _Host("gotham"), _ID(),
+      _NickName(), _UserName(), _FullName(), _ID(), _Host("gotham"),
       _remotaddr(), _addrlen(), _modes(), _joinedChannels() {}
 
 Client::Client(int fd)
     : _clientfd(fd), _Auth(false), _Registered(false), _isOperator(false),
-      _NickName(), _UserName(), _FullName(), _Host("gotham"), _ID(),
+      _NickName(), _UserName(), _FullName(), _ID(), _Host("gotham"),
       _remotaddr(), _addrlen(), _modes(), _joinedChannels() {}
 
 Client::Client(const Client& x)
     : _clientfd(x._clientfd), _Auth(x._Auth), _Registered(x._Registered),
       _isOperator(x._isOperator), _NickName(x._NickName), _UserName(x._UserName),
-      _FullName(x._FullName), _Host(x._Host), _ID(x._ID),
+      _FullName(x._FullName), _ID(x._ID), _Host(x._Host),
       _remotaddr(x._remotaddr), _addrlen(x._addrlen), _modes(x._modes),
       _joinedChannels(x._joinedChannels) {}
 
-Client& Client::operator=(const Client& rhs) {
-    if (this != &rhs) {
-        this->_clientfd = rhs._clientfd;
-        this->_Auth = rhs._Auth;
-        this->_Registered = rhs._Registered;
-        this->_isOperator = rhs._isOperator;
-        this->_NickName = rhs._NickName;
-        this->_UserName = rhs._UserName;
-        this->_FullName = rhs._FullName;
-        // _Host is const and cannot be assigned to
-        this->_ID = rhs._ID;
-        this->_remotaddr = rhs._remotaddr;
-        this->_addrlen = rhs._addrlen;
-        this->_modes = rhs._modes;
-        this->_joinedChannels = rhs._joinedChannels;
-    }
-    return *this;
+Client& Client::operator=(const Client& rhs) 
+{
+    if (this == &rhs)
+        return (*this);
+    this->_clientfd = rhs._clientfd;
+    this->_Auth = rhs._Auth;
+    this->_Registered = rhs._Registered;
+    this->_isOperator = rhs._isOperator;
+    this->_NickName = rhs._NickName;
+    this->_UserName = rhs._UserName;
+    this->_FullName = rhs._FullName;
+    this->_ID = rhs._ID;
+    this->_remotaddr = rhs._remotaddr;
+    this->_addrlen = rhs._addrlen;
+    this->_modes = rhs._modes;
+    this->_joinedChannels = rhs._joinedChannels;
+    return (*this);
 }
 
 Client::~Client() {}

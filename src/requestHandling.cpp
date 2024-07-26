@@ -6,13 +6,14 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:16 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 00:40:31 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 12:06:53 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-void Server::_ClientRequest(int index) {
+void Server::_ClientRequest(int index) 
+{
     char buf[6000];
     int sender_fd = this->_pfds[index].fd;
     int nbytes = recv(sender_fd, buf, sizeof(buf) - 1, 0); // -1 to leave space for null-terminator

@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 22:38:56 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 11:31:28 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #define CLIENT_HPP
 
 #include "Server.hpp"
-#include <sstream>
 
 
 # define GREEN "\e[1;32m"
@@ -51,14 +50,12 @@ class Client
 		std::string							_NickName;
 		std::string							_UserName;
 		std::string							_FullName;
-		const std::string					_Host;
 		std::string							_ID;
+		const std::string					_Host;
 		struct sockaddr_storage				_remotaddr;
 		socklen_t							_addrlen;
 		struct Modes						_modes;
 		std::map<std::string, Channel *>	_joinedChannels;
-
-	// private:
 
 	public:
 		Client();
@@ -67,44 +64,40 @@ class Client
 		~Client();
 		Client & operator= (const Client & rhs );
 
-	public: /*             Getters                         */
+		/*             Getters                         */
+		int									getClientfd()		const;
+		int									getRegistered()		const;
+		int									getisOperator()		const;
+		int									getMode(char mode)	const;
+		bool								getAuth()			const;
 		std::string							getUserName()		const;
 		std::string							getNickName()		const;
 		std::string							getFullName()		const;
 		std::string							getID()				const;
 		std::string							getHost()			const;
-		int									getClientfd()		const;
-		bool								getAuth()			const;
-		int									getRegistered()		const;
-		int									getisOperator()		const;
-		int									getMode(char mode)	const;
 		std::string							getUserPrefix()		const;
 		std::string							getUserInfo()		const;
 		std::string							getAllChannels()	const;
 		std::map<std::string, Channel *>	getJoinedChannels()	const;
 
 
-	public: /*             Setters                         */
+		/*             Setters                         */
 		void			setUserName(std::string UserName);
 		void			setNickName(std::string NickName);
 		void			setFullName(std::string FullName);
-		// void			setHost(std::string Host);
 		void			setID(std::string ID);
 		void			setClientfd(int clientfd);
 		void			setAuth(int Auth);
 		void			setRegistered(int Registered);
 		void			setIsOperator(int isOperator);
 		void			setMode(int value, char mode);
-		void			joinChannel(const std::string& channelName, Channel *channel );
+		void			joinChannel(const std::string& channelName, Channel *channel);
 		void			leaveChannel(const std::string& channelName);
 		std::string		leaveAllChannels();
 
-	public:
-		int			isJoined(const std::string& channelName) const;
 
-	public:
+		int				isJoined(const std::string& channelName) const;
 		std::string		JoinedChannels() const;
 };
-
 
 #endif

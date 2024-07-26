@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 10:58:14 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:21:04 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@ class Request
 		std::string					command;
 		bool						invalidMessage;
 
-	public:
 		Request();
+		Request(const Request &x);
+		Request & operator = (const Request &rhs);
 		~Request();
-		Request( const Request &x );
-		Request & operator = ( const Request &rhs );
 };
 
 #endif

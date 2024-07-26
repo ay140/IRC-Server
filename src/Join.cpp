@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:27 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 22:00:44 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 12:05:39 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ std::string Server::_joinChannel(Request request, int fd)
 
     return "";
 }
-
 
 int Server::_createChannel(const std::string& channelName, int creatorFd) 
 {

@@ -6,14 +6,13 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 00:23:26 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 12:08:40 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-
-Server::Server() : _name(), _password(), _socketfd(0), _clients(), _pfds(NULL), _online_c(0), _max_online_c(0), _prefix(":"), _allChannels(), _unavailableUserName(), _clientNicknames() {};
+Server::Server(): _online_c(0),_max_online_c(0),_socketfd(0),_name(),_password(),_prefix(":"),_pfds(NULL),_clients(),_unavailableUserName(),_clientNicknames(),_files(),_allChannels(){}
 
 Server::Server(const std::string& name, int max_online, const std::string& port, const std::string& password) {
     _name = name;
@@ -32,6 +31,60 @@ Server::Server(const std::string& name, int max_online, const std::string& port,
     signal(SIGINT, handle_signal);
 }
 
+Server::Server(const Server & x)
+    : _online_c(x._online_c),
+      _max_online_c(x._max_online_c),
+      _socketfd(x._socketfd),
+      _name(x._name),
+      _password(x._password),
+      _prefix(x._prefix),
+      _pfds(NULL),
+      _clients(x._clients),
+      _unavailableUserName(x._unavailableUserName),
+      _clientNicknames(x._clientNicknames),
+      _files(x._files),
+      _allChannels(x._allChannels)
+{
+    if (x._pfds) 
+    {
+        _pfds = new struct pollfd[_max_online_c];
+        std::copy(x._pfds, x._pfds + _max_online_c, _pfds);
+    }
+}
+
+Server & Server::operator=(const Server & rhs)
+{
+    if (this != &rhs) 
+    {
+        _online_c = rhs._online_c;
+        _max_online_c = rhs._max_online_c;
+        _socketfd = rhs._socketfd;
+        _name = rhs._name;
+        _password = rhs._password;
+        _prefix = rhs._prefix;
+
+        // Deep copy of _pfds
+        if (_pfds) 
+        {
+            delete[] _pfds;
+        }
+        if (rhs._pfds) 
+        {
+            _pfds = new struct pollfd[_max_online_c];
+            std::copy(rhs._pfds, rhs._pfds + _max_online_c, _pfds);
+        } 
+        else 
+        {
+            _pfds = NULL;
+        }
+        _clients = rhs._clients;
+        _unavailableUserName = rhs._unavailableUserName;
+        _clientNicknames = rhs._clientNicknames;
+        _files = rhs._files;
+        _allChannels = rhs._allChannels;
+    }
+    return *this;
+}
 Server::~Server() 
 {
     delete[] this->_pfds; // Always non-null after initialization
@@ -53,6 +106,16 @@ Server::~Server()
 	{
         close(_socketfd);
     }
+}
+
+std::string Server::_welcomemsg(void)
+{
+    std::string welcome = RED;
+    welcome.append("Welcome to the IRC Server!\n");
+    welcome.append(CYAN);
+    welcome.append("Please login to start chatting, or type HELP for assistance.\n");
+    welcome.append(RESET);
+    return welcome;
 }
 
 void Server::handle_signal(int signal) 
@@ -101,37 +164,33 @@ void Server::_newClient(void) {
               << " on socket " << newfd << std::endl;
 }
 
-
-void* Server::get_in_addr(struct sockaddr* sa) 
+void Server::startServer(void) 
 {
-    if (sa->sa_family == AF_INET) 
+    while (true) 
     {
-        return &(((struct sockaddr_in*)sa)->sin_addr);
-    }
-    return &(((struct sockaddr_in6*)sa)->sin6_addr);
-}
-
-void Server::startServer(void) {
-    while (true) {
         int poll_count = poll(this->_pfds, this->_online_c, -1);
-        if (poll_count == -1) {
+        if (poll_count == -1) 
+        {
             std::cout << "poll() error: " << strerror(errno) << std::endl;
             exit(EXIT_FAILURE);
         }
 
-        for (int i = 0; i < this->_online_c; ++i) {
-            if (this->_pfds[i].revents & POLLIN) {
-                if (this->_pfds[i].fd == this->_socketfd) {
+        for (int i = 0; i < this->_online_c; ++i) 
+        {
+            if (this->_pfds[i].revents & POLLIN) 
+            {
+                if (this->_pfds[i].fd == this->_socketfd) 
+                {
                     _newClient(); // Handle new connection
-                } else {
+                } 
+                else 
+                {
                     _ClientRequest(i); // Handle client request
                 }
             }
         }
     }
 }
-
-
 
 std::string	Server::_getPassword() const 
 { 

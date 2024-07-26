@@ -6,7 +6,7 @@
 #    By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/25 10:49:31 by amarzouk          #+#    #+#              #
-#    Updated: 2024/07/25 23:04:45 by ayman_marzo      ###   ########.fr        #
+#    Updated: 2024/07/26 12:10:13 by ayman_marzo      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,10 +29,10 @@ BLUE = \033[1;34m
 RESET = \033[0m
 
 # Source and header files
-SRC_FILES = Client.cpp Server.cpp commands.cpp getSocket.cpp messagesHandling.cpp \
-pollHandling.cpp utils.cpp PartCommand.cpp JoinCommand.cpp KickCommand.cpp \
-PrivmsgCommand.cpp FileTransfer.cpp Request.cpp File.cpp requestHandling.cpp \
-Channel.cpp MyBot.cpp
+SRC_FILES = Client.cpp Server.cpp commands.cpp getSocket.cpp \
+pollHandling.cpp utils.cpp PartCommand.cpp Join.cpp Kick.cpp \
+Privmsg.cpp Request.cpp File.cpp requestHandling.cpp \
+Channel.cpp Bot.cpp
 
 HEADERS_FILES = include/Client.hpp include/Server.hpp include/Channel.hpp \
 include/Request.hpp include/File.hpp
