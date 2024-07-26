@@ -6,55 +6,53 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 00:44:35 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 17:17:37 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-std::string Server::_parsing(const std::string& message, int i)
+std::string Server::_parsing(const std::string& message, int i) 
 {
-	Request	request(_splitRequest(message));
+    Request request(_splitRequest(message));
 
-	if (request.invalidMessage)
-		return ("Invalid message!\n");
-	if (request.command == "PASS")
-		return (_setPassWord(request, i));
-	else if (request.command == "NICK")
-		return (_setNickName(request, i));
-	else if (request.command == "USER")
-		return (_setUserName(request, i));
-	else if (request.command == "OPER")
-		return (_setOper(request, i));
-	else if (request.command == "MODE")
-		return (_setMode(request, i));
-	else if (request.command == "PRIVMSG")
-		return (_privmsg(request, i));
-	else if (request.command == "NOTICE")
-		return (_notice(request, i));
-	else if (request.command == "HELP")
-		return (_printHelpInfo());
-	else if (request.command == "JOIN")
-		return (_joinChannel(request, i));
-	else if (request.command == "TOPIC")
-		return (_topic(request, i));
-	else if (request.command == "KICK")
-		return (_kick(request, i));
-	else if (request.command == "PART")
-		return (_part(request, i));
-	else if (request.command == "QUIT")
-		return (_quit(request, i));
-	else if (request.command == "SENDFILE")
-		return (_sendFile(request, i));
-	else if (request.command == "GETFILE")
-		return (_getFile(request, i));
-	else if (request.command == "BOT")
-		return (_MyBot( request, i));
-	else
-		return ("Invalid command\n");
-};
-
-
+    if (request.invalidMessage)
+        return "Invalid message!\n";
+    if (request.command == "PASS")
+        return _setPassWord(request, i);
+    else if (request.command == "NICK")
+        return _setNickName(request, i);
+    else if (request.command == "USER")
+        return _setUserName(request, i);
+    else if (request.command == "OPER")
+        return _setOper(request, i);
+    else if (request.command == "MODE")
+        return _setMode(request, i);
+    else if (request.command == "PRIVMSG")
+        return _privmsg(request, i);
+    else if (request.command == "NOTICE")
+        return _notice(request, i);
+    else if (request.command == "HELP")
+        return _printHelpInfo();
+    else if (request.command == "JOIN")
+        return _joinChannel(request, i);
+    else if (request.command == "TOPIC")
+        return _topic(request, i);
+    else if (request.command == "KICK")
+        return _kick(request, i);
+    else if (request.command == "PART")
+        return _part(request, i);
+    else if (request.command == "QUIT")
+        return _quit(request, i);
+    else if (request.command == "SENDFILE")
+        return _sendFile(request, i);
+    else if (request.command == "GETFILE")
+        return _getFile(request, i);
+    else if (request.command == "BOT")
+        return _MyBot(request, i);
+    else
+        return "Invalid command\n";
+}
 
 std::string Server::_notice(Request request, int i) 
 {

@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 00:43:45 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/26 17:01:52 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ void Server::_removeFromPoll(int index) {
     this->_online_c--;
 
     // Print debug information
-    std::cout << "Removed fd: " << fd_to_remove << " from poll and clients map. Current online count: " << this->_online_c << std::endl;
+    std::cout << "Removed fd: " << fd_to_remove << " from poll and clients map. Current online count: " << this->_online_c - 1 << std::endl;
 }
