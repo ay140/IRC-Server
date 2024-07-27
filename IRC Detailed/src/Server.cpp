@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 21:30:27 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 21:29:06 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,31 @@ Server::Server(const std::string& name, int max_online, const std::string& port,
     try 
     {
         _name = name;
-        _max_online_c = max_online + 1;
+        _max_online_c = max_online + 1; // +1 for the server socket
         _password = password;
         _online_c = 0;
-        _socketfd = -1;
-        _pfds = new struct pollfd[max_online + 1];
+        _socketfd = -1; // -1 indicates that the socket is not yet created
+        _pfds = new struct pollfd[max_online + 1];  // Allocate memory for pollfd array
 
-        _getSocket(port);
+        _getSocket(port); // Create the server socket
 
         _pfds[0].fd = _socketfd;
         _pfds[0].events = POLLIN;
         _online_c++;
 
-        signal(SIGINT, handle_signal);
+        signal(SIGINT, handle_signal); // Set up signal handler for shutdown
     }
     catch (const std::bad_alloc& e) 
     {
         std::cerr << "Memory allocation failed: " << e.what() << std::endl;
-        delete[] _pfds;
-        throw;
+        delete[] _pfds; // Free allocated memory
+        throw; // Re-throw the exception
     }
     catch (const std::runtime_error& e)
     {
         std::cerr << "Runtime error: " << e.what() << std::endl;
-        delete[] _pfds;
-        throw;
+        delete[] _pfds; // Free allocated memory
+        throw; // Re-throw the exception
     }
 }
 
