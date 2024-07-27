@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 12:08:40 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 14:51:13 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ Server::Server(): _online_c(0),_max_online_c(0),_socketfd(0),_name(),_password()
 
 Server::Server(const std::string& name, int max_online, const std::string& port, const std::string& password) {
     _name = name;
-    _password = password;
     _max_online_c = max_online + 1;
+    _password = password;
     _online_c = 0;
     _socketfd = -1;
     _pfds = new struct pollfd[max_online + 1];
