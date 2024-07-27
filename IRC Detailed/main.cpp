@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:48:31 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 21:34:03 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 22:49:25 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main(int ac, char **av)
     try 
     {
         int port = std::atoi(av[1]);
-        if (port < 6660 || port > 6669) 
+        if (port < 6660 || port > 6669) // Port number must be between 6660 and 6669 recommended by IANA for private use
         {
             throw std::runtime_error("Invalid port number. Port number must be between 6660 and 6669.");
         }

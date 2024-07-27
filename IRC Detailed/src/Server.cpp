@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 21:29:06 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 22:48:02 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,23 @@ Server::Server(const std::string& name, int max_online, const std::string& port,
         _socketfd = -1; // -1 indicates that the socket is not yet created
         _pfds = new struct pollfd[max_online + 1];  // Allocate memory for pollfd array
 
-        _getSocket(port); // Create the server socket
+/* 
+    The pollfd structure is used to monitor multiple file descriptors to see if they have any events that need to be handled.
+    struct pollfd {
+        int fd;       // The file descriptor to be monitored
+        short events; // The events of interest
+        short revents;// The events that actually occurred
 
-        _pfds[0].fd = _socketfd;
+    When you set the events field of a pollfd structure to POLLIN, you are indicating that you are interested in knowing when there is data to read on that file descriptor.
+    This means that you want to be notified when there is data to read on the server socket. For a server socket, this typically means an incoming connection request.
+    };
+*/
+
+        _getSocket(port); // Create the server socket, bind and listen
+
+        _pfds[0].fd = _socketfd; // Set the first pollfd structure to the server socket
         _pfds[0].events = POLLIN;
-        _online_c++;
+        _online_c++; // Increment the count of online clients (server socket is online)
 
         signal(SIGINT, handle_signal); // Set up signal handler for shutdown
     }
