@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 11:26:29 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 15:51:36 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ class Channel
 {
 	private:
 		Channel();
+		Channel(const Channel& x);
+		Channel &operator=( const Channel& rhs );
 		int								_onlineUsers;
 		char							_prefix;
 		Client*							_creator;
@@ -43,12 +45,9 @@ class Channel
 		std::map<int, Client *>			_voice;
 		std::vector<std::string>		_banned;
 
-
 	public:
 		Channel(const std::string& channelName, Client* creator);
 		Channel(const std::string& channelName, const std::string& channelKey, Client* creator);
-		Channel(const Channel& x);
-		Channel &operator=( const Channel& rhs );
 		~Channel();
 			/*             Setters                         */
 		void	setPrefix(char prefix);

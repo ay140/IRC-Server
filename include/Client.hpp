@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 11:31:28 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 15:49:58 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ const std::string	currentDateTime();
 class Client
 {
 	private:
+		Client();
+		Client(const Client & x);
+		Client& operator=(const Client & rhs);
 		int									_clientfd;
 		bool								_Auth;
 		bool								_Registered;
@@ -58,11 +61,8 @@ class Client
 		std::map<std::string, Channel *>	_joinedChannels;
 
 	public:
-		Client();
-		Client( int fd );
-		Client(const Client & x );
+		Client(int fd);
 		~Client();
-		Client & operator= (const Client & rhs );
 
 		/*             Getters                         */
 		int									getClientfd()		const;

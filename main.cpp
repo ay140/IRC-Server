@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:48:31 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 14:59:12 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 15:30:39 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int main(int ac, char **av)
     }
     try
     {
-        Server srv("Gotham", 1000, av[1], av[2]);
+        Server srv("Gotham", 100, av[1], av[2]);
         srv.startServer();
     }
     catch (const std::exception& e)

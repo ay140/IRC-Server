@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 14:51:13 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 15:53:07 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 Server::Server(): _online_c(0),_max_online_c(0),_socketfd(0),_name(),_password(),_prefix(":"),_pfds(NULL),_clients(),_unavailableUserName(),_clientNicknames(),_files(),_allChannels(){}
 
-Server::Server(const std::string& name, int max_online, const std::string& port, const std::string& password) {
+Server::Server(const std::string& name, int max_online, const std::string& port, const std::string& password) 
+{
     _name = name;
     _max_online_c = max_online + 1;
     _password = password;

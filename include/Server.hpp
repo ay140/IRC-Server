@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 12:02:36 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/27 15:45:17 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ class Server
 {
 	public:
 		Server(const std::string& name, int max_online, const std::string& port, const std::string& password);
-		Server(const Server& x);
-		Server & operator=( const Server & rhs );
 		~Server();
 
 		void startServer(void);
@@ -60,6 +58,8 @@ class Server
 		std::map<std::string, Channel *>	_allChannels;
 
 		Server();
+		Server(const Server& x);
+		Server & operator=( const Server & rhs );
 		
 							/* setters */
 		std::string						_setUserName(Request request, int i);
