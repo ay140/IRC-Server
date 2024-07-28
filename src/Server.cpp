@@ -25,6 +25,13 @@ Server::Server(const std::string& name, int max_online, const std::string& port,
         _socketfd = -1;
         _pfds = new struct pollfd[max_online + 1];
 
+                // Initialize all pollfd structs in the array
+        for (int i = 0; i < max_online + 1; ++i) {
+            _pfds[i].fd = -1;
+            _pfds[i].events = 0;
+            _pfds[i].revents = 0;
+        }
+
         _getSocket(port);
 
         _pfds[0].fd = _socketfd;
