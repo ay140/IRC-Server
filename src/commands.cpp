@@ -260,6 +260,13 @@ std::string Server::_setNickName(Request request, int i)
         return _printMessage("431", this->_clients[i]->getNickName(), ":No nickname given");
     }
 
+    // Check if the client has already set a nickname
+    if (!this->_clients[i]->getNickName().empty()) 
+    {
+        // 999: Custom error for nickname already set
+        return _printMessage("999", this->_clients[i]->getNickName(), ":Nickname can only be set once");
+    }
+
     const std::string& nickName = request.args[0];
     for (std::string::const_iterator it = nickName.begin(); it != nickName.end(); ++it) 
     {
@@ -288,6 +295,7 @@ std::string Server::_setNickName(Request request, int i)
     }
     return "";
 }
+
 
 std::string Server::_setUserName(Request request, int i) 
 {
@@ -322,31 +330,28 @@ std::string Server::_setUserName(Request request, int i)
     return "";
 }
 
-std::string Server::_quit(Request request, int i) 
-{
+std::string Server::_quit(Request request, int i) {
     std::string ret = this->_clients[i]->getUserPrefix() + "QUIT ";
     if (request.args.size())
         ret.append(":" + request.args[0] + "\n");
     else
         ret.append("\n");
-
     std::map<std::string, Channel *> channels = this->_clients[i]->getJoinedChannels();
     std::map<std::string, Channel *>::iterator it = channels.begin();
-    while (it != channels.end()) 
-    {
+    while (it != channels.end()) {
         _sendToAllUsers(it->second, i, ret);
         it++;
     }
     this->_clients[i]->leaveAllChannels();
     std::string nickname = this->_clients[i]->getNickName();
-    if (!nickname.empty()) 
-    {
+    if (!nickname.empty()) {
         this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
     }
     close(this->_clients[i]->getClientfd());
     _removeFromPoll(i);
     return ("QUIT");
 }
+
 
 std::string Server::_printHelpInfo() 
 {

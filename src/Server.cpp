@@ -148,10 +148,14 @@ void Server::handle_signal(int signal)
         std::cout << "Received SIGINT, shutting down server..." << std::endl;
         if (server_instance) 
         {
-            delete server_instance; // This will call the destructor to clean up resources
+            for (int i = 1; i < server_instance->_online_c; ++i) 
+            {
+                server_instance->_removeFromPoll(i);
+            }
+            delete server_instance;
             server_instance = NULL;
         }
-        std::exit(EXIT_SUCCESS);
+        exit(0);
     }
 }
 

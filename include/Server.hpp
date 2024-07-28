@@ -133,7 +133,7 @@ class Server
 		std::string						_printUserModes(std::string ret, int i);
 		bool							_validMode(Request request);
 		std::string						_quit(Request request, int i);
-		void _cleanupDisconnectedClients() ;
+		void checkDisconnectedClients(int fd_to_remove) ;
 };
 
 template <typename T>
