@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pollHandling.cpp                                   :+:      :+:    :+:   */
+/*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 17:01:52 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 20:58:00 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,9 @@ void Server::_removeFromPoll(int index)
         std::cout << "Invalid index for _removeFromPoll: " << index << std::endl;
         return;
     }
-
+    
     int fd_to_remove = this->_pfds[index].fd;
-
-    // Print debug information
-    std::cout << "Removing fd: " << fd_to_remove << " at index: " << index << std::endl;
-
-    // Close the socket
+    
     close(fd_to_remove);
 
     // Remove from clients map and nicknames list
@@ -91,10 +87,8 @@ void Server::_removeFromPoll(int index)
     if (index != this->_online_c - 1) 
     {
         this->_pfds[index] = this->_pfds[this->_online_c - 1];
-        std::cout << "Moved fd: " << this->_pfds[index].fd << " to index: " << index << std::endl;
     }
     this->_online_c--;
 
-    // Print debug information
     std::cout << "Removed fd: " << fd_to_remove << " from poll and clients map. Current online count: " << this->_online_c << std::endl;
 }

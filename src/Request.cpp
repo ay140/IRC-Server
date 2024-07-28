@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:02 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 20:13:55 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 20:53:40 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,10 @@ void Server::_ClientRequest(int index)
         }
         
         std::string ret = _parsing(message, this->_pfds[index].fd);
-        if (!ret.empty() && send(sender_fd, ret.c_str(), ret.length(), 0) == -1) {
-            std::cout << "send() error: " << strerror(errno) << std::endl;
+        
+        if (message != "QUIT" && !ret.empty() && send(sender_fd, ret.c_str(), ret.length(), 0) == -1) 
+        {
+            std::cout << "send() error: " << strerror(errno) << std::endl; // debug 
         }
     }
     memset(buf, 0, sizeof(buf)); // Clear the buffer

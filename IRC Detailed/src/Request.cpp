@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:02 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 20:13:55 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 20:48:21 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void Server::_ClientRequest(int index)
         std::string message(buf);
 
         // Remove trailing '\r' or '\n' if present
-        while (!message.empty() && (message.back() == '\r' || message.back() == '\n')) {
-            message.pop_back();
+        while (!message.empty() && (message[message.size() - 1] == '\r' || message[message.size() - 1] == '\n')) {
+            message.erase(message.size() - 1);
         }
         
         std::string ret = _parsing(message, this->_pfds[index].fd);

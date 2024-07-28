@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 21:30:27 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 20:55:40 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,8 @@ std::string	Server::_printMessage(std::string num, std::string nickname, std::st
 	return (":" + this->_name + " " + num + " " + nickname + " " + message + "\n");
 }
 
-void Server::_newClient(void) {
+void Server::_newClient(void) 
+{
     struct sockaddr_storage remotaddr;
     socklen_t addrlen = sizeof remotaddr;
     int newfd = accept(this->_socketfd, (struct sockaddr*)&remotaddr, &addrlen);
@@ -187,7 +188,8 @@ void Server::_newClient(void) {
     this->_clients[newfd] = new Client(newfd); // Ensure correct client initialization
 
     std::string welcome = _welcomemsg();
-    if (send(newfd, welcome.c_str(), welcome.length(), 0) == -1) {
+    if (send(newfd, welcome.c_str(), welcome.length(), 0) == -1) 
+    {
         std::cout << "send() error: " << strerror(errno) << std::endl;
     }
     

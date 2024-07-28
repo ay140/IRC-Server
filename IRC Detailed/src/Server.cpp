@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 22:48:02 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 19:40:28 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ Server::Server(const std::string& name, int max_online, const std::string& port,
         _socketfd = -1; // -1 indicates that the socket is not yet created
         _pfds = new struct pollfd[max_online + 1];  // Allocate memory for pollfd array
 
+        // Initialize all pollfd structs in the array
+        for (int i = 0; i < max_online + 1; ++i) 
+        {
+            _pfds[i].fd = -1;
+            _pfds[i].events = 0;
+            _pfds[i].revents = 0;
+        }
 /* 
     The pollfd structure is used to monitor multiple file descriptors to see if they have any events that need to be handled.
     struct pollfd {
@@ -150,8 +157,13 @@ void Server::handle_signal(int signal)
 {
     if (signal == SIGINT) 
     {
-        std::cout << "  Received SIGINT, shutting down server..." << std::endl;
-        exit(0);
+        std::cout << "Received SIGINT, shutting down server..." << std::endl;
+        if (server_instance) 
+        {
+            delete server_instance; // This will call the destructor to clean up resources
+            server_instance = NULL;
+        }
+        std::exit(EXIT_SUCCESS);
     }
 }
 

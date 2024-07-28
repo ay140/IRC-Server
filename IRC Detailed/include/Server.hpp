@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 20:40:57 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 19:42:44 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,8 @@ std::string to_string(T value)
     oss << value;
     return oss.str();
 }
+
+extern Server* server_instance;
 
 #include "Channel.hpp"
 #include "Client.hpp"

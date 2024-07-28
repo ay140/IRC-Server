@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 17:17:37 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 20:29:55 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,27 +324,31 @@ std::string Server::_setUserName(Request request, int i)
     }
     return "";
 }
-std::string Server::_quit(Request request, int i) {
+std::string Server::_quit(Request request, int i) 
+{
     std::string ret = this->_clients[i]->getUserPrefix() + "QUIT ";
     if (request.args.size())
         ret.append(":" + request.args[0] + "\n");
     else
         ret.append("\n");
+
     std::map<std::string, Channel *> channels = this->_clients[i]->getJoinedChannels();
-    std::map<std::string, Channel *>::iterator it = channels.begin();
-    while (it != channels.end()) {
+    for (std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); ++it) {
         _sendToAllUsers(it->second, i, ret);
-        it++;
     }
     this->_clients[i]->leaveAllChannels();
+
     std::string nickname = this->_clients[i]->getNickName();
     if (!nickname.empty()) {
         this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
     }
+
     close(this->_clients[i]->getClientfd());
     _removeFromPoll(i);
-    return ("QUIT");
+
+    return "QUIT";
 }
+
 
 std::string Server::_printHelpInfo() 
 {

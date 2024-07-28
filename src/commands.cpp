@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 17:17:37 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/28 20:55:00 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,7 +330,8 @@ std::string Server::_setUserName(Request request, int i)
     return "";
 }
 
-std::string Server::_quit(Request request, int i) {
+std::string Server::_quit(Request request, int i) 
+{
     std::string ret = this->_clients[i]->getUserPrefix() + "QUIT ";
     if (request.args.size())
         ret.append(":" + request.args[0] + "\n");
@@ -348,7 +349,7 @@ std::string Server::_quit(Request request, int i) {
         this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
     }
     close(this->_clients[i]->getClientfd());
-    _removeFromPoll(i);
+    _removeFromPoll(i -3);
     return ("QUIT");
 }
 
