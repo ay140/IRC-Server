@@ -1,0 +1,6 @@
+valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6661 1
+
+ps aux | grep ircserv
+
+lsof -p 13343
+
