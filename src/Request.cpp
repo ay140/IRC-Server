@@ -51,8 +51,8 @@ void Server::_ClientRequest(int index)
         std::string message(buf);
 
         // Remove trailing '\r' or '\n' if present
-        while (!message.empty() && (message.back() == '\r' || message.back() == '\n')) {
-            message.pop_back();
+        while (!message.empty() && (message[message.size() - 1] == '\r' || message[message.size() - 1] == '\n')) {
+            message.erase(message.size() - 1);
         }
         
         std::string ret = _parsing(message, this->_pfds[index].fd);
@@ -62,6 +62,7 @@ void Server::_ClientRequest(int index)
     }
     memset(buf, 0, sizeof(buf)); // Clear the buffer
 }
+
 
 Request Server::_splitRequest(const std::string& req) {
     Request request;

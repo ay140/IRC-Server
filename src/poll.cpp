@@ -12,7 +12,25 @@
 
 #include "../include/Server.hpp"
 
-void Server::_addToPoll(int newfd) {
+void Server::_cleanupDisconnectedClients() 
+{
+    std::cout << "test" << std::endl;
+    for (int i = 1; i < this->_online_c; ++i) { // Start from 1 to skip the server socket
+        int fd = this->_pfds[i].fd;
+        int error = 0;
+        socklen_t len = sizeof(error);
+
+        // Check the socket status
+        if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &error, &len) < 0 || error != 0) {
+            std::cout << "Cleaning up disconnected client: " << fd << std::endl;
+            _removeFromPoll(i);
+            --i; // Adjust the index because _removeFromPoll shifts the array left
+        }
+    }
+}
+
+void Server::_addToPoll(int newfd) 
+{
     if (this->_online_c == this->_max_online_c) 
 	{
         this->_max_online_c *= 2;
@@ -29,6 +47,8 @@ void Server::_addToPoll(int newfd) {
     this->_clients.insert(std::make_pair(newfd, new Client(newfd)));
     this->_online_c++;
 }
+
+
 void Server::_removeFromPoll(int index) {
     if (index < 0 || index >= this->_online_c) {
         std::cout << "Invalid index for _removeFromPoll: " << index << std::endl;
@@ -64,5 +84,5 @@ void Server::_removeFromPoll(int index) {
     this->_online_c--;
 
     // Print debug information
-    std::cout << "Removed fd: " << fd_to_remove << " from poll and clients map. Current online count: " << this->_online_c - 1 << std::endl;
+    std::cout << "Removed fd: " << fd_to_remove << " from poll and clients map. Current online count: " << this->_online_c << std::endl;
 }

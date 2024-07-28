@@ -29,6 +29,8 @@
 #include <poll.h>
 #include <sstream>
 #include <fcntl.h>
+#include <csignal> 
+#include <algorithm> 
 
 class Client;
 class Channel;
@@ -131,6 +133,7 @@ class Server
 		std::string						_printUserModes(std::string ret, int i);
 		bool							_validMode(Request request);
 		std::string						_quit(Request request, int i);
+		void _cleanupDisconnectedClients() ;
 };
 
 template <typename T>
@@ -140,6 +143,8 @@ std::string to_string(T value)
     oss << value;
     return oss.str();
 }
+
+extern Server* server_instance;
 
 #include "Channel.hpp"
 #include "Client.hpp"

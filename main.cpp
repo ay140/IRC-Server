@@ -12,6 +12,9 @@
 
 #include "include/Server.hpp"
 
+Server* server_instance = NULL;
+
+
 int main(int ac, char **av)
 {
     if (ac != 3)
@@ -29,25 +32,25 @@ int main(int ac, char **av)
         }
 
         std::cout << "Using port: " << port << std::endl;
-
-        Server srv("Gotham", 100, av[1], av[2]);
-        srv.startServer();
     } 
-    catch (const std::bad_alloc& e) 
-    {
-        std::cerr << "Error: Memory allocation failed - " << e.what() << std::endl;
-        return 1;
-    }
-    catch (const std::runtime_error& e) 
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
-    catch (const std::exception& e) 
+    catch (const std::exception &e) 
     {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
 
+    try
+    {
+        server_instance = new Server("Gotham", 100, av[1], av[2]);
+        server_instance->startServer();
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << '\n';
+        delete server_instance;
+        return 1;
+    }
+
+    delete server_instance;
     return 0;
 }

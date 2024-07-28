@@ -138,8 +138,13 @@ void Server::handle_signal(int signal)
 {
     if (signal == SIGINT) 
     {
-        std::cout << "  Received SIGINT, shutting down server..." << std::endl;
-        exit(0);
+        std::cout << "Received SIGINT, shutting down server..." << std::endl;
+        if (server_instance) 
+        {
+            delete server_instance; // This will call the destructor to clean up resources
+            server_instance = NULL;
+        }
+        std::exit(EXIT_SUCCESS);
     }
 }
 

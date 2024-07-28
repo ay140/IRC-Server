@@ -246,35 +246,32 @@ std::string	Server::_setPassWord(Request request, int i)
 	return ("");
 };
 
-
-
-
 std::string Server::_setNickName(Request request, int i) 
 {
     if (!this->_clients[i]->getAuth()) 
-	{
+    {
         // 998: Custom error for authentication required
         return _printMessage("998", this->_clients[i]->getNickName(), ":You need to authenticate first");
     }
 
     if (request.args.size() < 1) 
-	{
+    {
         // 431: ERR_NONICKNAMEGIVEN - No nickname given
         return _printMessage("431", this->_clients[i]->getNickName(), ":No nickname given");
     }
 
     const std::string& nickName = request.args[0];
     for (std::string::const_iterator it = nickName.begin(); it != nickName.end(); ++it) 
-	{
+    {
         if (!isalnum(*it) && *it != '-' && *it != '\r') 
-		{
+        {
             // 432: ERR_ERRONEUSNICKNAME - Erroneous nickname
             return _printMessage("432", this->_clients[i]->getNickName(), nickName + " :Erroneous nickname");
         }
     }
 
     if (std::find(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickName) != this->_clientNicknames.end()) 
-	{
+    {
         // 433: ERR_NICKNAMEINUSE - Nickname is already in use
         return _printMessage("433", this->_clients[i]->getNickName(), nickName + " :Nickname is already in use");
     }
@@ -283,7 +280,7 @@ std::string Server::_setNickName(Request request, int i)
     this->_clientNicknames.push_back(nickName);
 
     if (!this->_clients[i]->getUserName().empty()) 
-	{
+    {
         this->_clients[i]->setID(nickName + "!" + this->_clients[i]->getUserName() + "@" + this->_clients[i]->getHost());
         this->_clients[i]->setRegistered(true);
         // 001: RPL_WELCOME - Welcome to the Internet Relay Network
@@ -324,21 +321,26 @@ std::string Server::_setUserName(Request request, int i)
     }
     return "";
 }
-std::string Server::_quit(Request request, int i) {
+
+std::string Server::_quit(Request request, int i) 
+{
     std::string ret = this->_clients[i]->getUserPrefix() + "QUIT ";
     if (request.args.size())
         ret.append(":" + request.args[0] + "\n");
     else
         ret.append("\n");
+
     std::map<std::string, Channel *> channels = this->_clients[i]->getJoinedChannels();
     std::map<std::string, Channel *>::iterator it = channels.begin();
-    while (it != channels.end()) {
+    while (it != channels.end()) 
+    {
         _sendToAllUsers(it->second, i, ret);
         it++;
     }
     this->_clients[i]->leaveAllChannels();
     std::string nickname = this->_clients[i]->getNickName();
-    if (!nickname.empty()) {
+    if (!nickname.empty()) 
+    {
         this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
     }
     close(this->_clients[i]->getClientfd());
