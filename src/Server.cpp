@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 09:49:50 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 07:35:19 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,21 +177,28 @@ void Server::_newClient(void)
     socklen_t addrlen = sizeof remotaddr;
     int newfd = accept(this->_socketfd, (struct sockaddr*)&remotaddr, &addrlen);
     
-    if (newfd == -1) {
-        std::cout << "accept() error: " << strerror(errno) << std::endl;
-        return;
-    }
-    
-    // Set the new socket to non-blocking mode
-    if (fcntl(newfd, F_SETFL, O_NONBLOCK) == -1) {
-        std::cout << "fcntl() error: " << strerror(errno) << std::endl;
-        close(newfd);
-        return;
-    }
-    
-    _addToPoll(newfd);
-    this->_clients[newfd] = new Client(newfd); // Ensure correct client initialization
+    if (newfd == -1) 
+    {
+        throw std::runtime_error(std::string("accept() error: ") + strerror(errno));
 
+    }
+    // Set the new socket to non-blocking mode
+    if (fcntl(newfd, F_SETFL, O_NONBLOCK) == -1) 
+    {
+        close(newfd);
+        throw std::runtime_error(std::string("fcntl() error: ") + strerror(errno));
+    }
+    
+    try 
+    {
+    _addToPoll(newfd);
+    } 
+    catch (const std::exception& e) 
+    {
+        close(newfd);
+        throw; // Rethrow the exception to be caught in startServer
+    }
+    
     std::string welcome = _welcomemsg();
     if (send(newfd, welcome.c_str(), welcome.length(), 0) == -1) 
     {
@@ -219,7 +226,15 @@ void Server::startServer(void)
             {
                 if (this->_pfds[i].fd == this->_socketfd) 
                 {
-                    _newClient(); // Handle new connection
+                    try 
+                    {
+                        _newClient(); // Handle new connection
+                    } 
+                    catch (const std::exception& e) 
+                    {
+                        std::cerr << "Error in _newClient: " << e.what() << std::endl;
+                        throw;
+                    }                
                 } 
                 else 
                 {

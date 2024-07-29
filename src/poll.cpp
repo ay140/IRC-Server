@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/28 20:58:00 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 07:29:06 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,22 @@ void Server::_addToPoll(int newfd)
         struct pollfd* new_pfds = (struct pollfd*)realloc(this->_pfds, sizeof(struct pollfd) * this->_max_online_c);
         if (new_pfds == NULL) 
 		{
-            std::cerr << "realloc() error: " << strerror(errno) << std::endl;
-            exit(1); // Exit on memory allocation failure
+            throw std::runtime_error("realloc() error: " + std::string(strerror(errno)));
         }
         this->_pfds = new_pfds;
     }
+    try
+    {
     this->_pfds[this->_online_c].fd = newfd;
     this->_pfds[this->_online_c].events = POLLIN;
     this->_clients.insert(std::make_pair(newfd, new Client(newfd)));
     this->_online_c++;
+    }
+    catch (const std::exception &e) 
+    {
+        std::cerr << "Memory allocation failed: " << e.what() << std::endl;
+        throw;
+    }
 }
 
 
