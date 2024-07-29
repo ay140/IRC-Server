@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 07:19:41 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/29 07:29:06 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,18 @@ void Server::_addToPoll(int newfd)
         }
         this->_pfds = new_pfds;
     }
+    try
+    {
     this->_pfds[this->_online_c].fd = newfd;
     this->_pfds[this->_online_c].events = POLLIN;
     this->_clients.insert(std::make_pair(newfd, new Client(newfd)));
     this->_online_c++;
+    }
+    catch (const std::exception &e) 
+    {
+        std::cerr << "Memory allocation failed: " << e.what() << std::endl;
+        throw;
+    }
 }
 
 
