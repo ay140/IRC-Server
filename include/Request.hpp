@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 15:48:03 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 09:29:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ class Request
 		bool						invalidMessage;
 
 		Request();
-		~Request();
+		Request(const std::vector<std::string> &splittedMessage);
 		Request(const Request &x);
+		~Request();
 };
 
 #endif
