@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 09:45:46 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 09:50:44 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,8 +217,7 @@ void Server::startServer(void)
         int poll_count = poll(this->_pfds, this->_online_c, -1); // update the pollfd array
         if (poll_count == -1) 
         {
-            std::cout << "poll() error: " << strerror(errno) << std::endl;
-            exit(EXIT_FAILURE);
+                throw std::runtime_error(std::string("poll() error: ") + strerror(errno));
         }
 
         for (int i = 0; i < this->_online_c; ++i) 
