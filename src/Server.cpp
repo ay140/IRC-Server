@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 07:17:17 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/29 07:35:19 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,8 +199,6 @@ void Server::_newClient(void)
         throw; // Rethrow the exception to be caught in startServer
     }
     
-    this->_clients[newfd] = new Client(newfd); // Ensure correct client initialization
-
     std::string welcome = _welcomemsg();
     if (send(newfd, welcome.c_str(), welcome.length(), 0) == -1) 
     {
