@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 14:15:47 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:38:47 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ std::string Server::_parsing(const std::string& message, int i)
         return _setUserName(request, i);
     else if (request.command == "OPER")
         return _setOper(request, i);
-    else if (request.command == "MODE")
+    else if (request.command == "MODE") // reached here
         return _setMode(request, i);
     else if (request.command == "PRIVMSG")
         return _privmsg(request, i);
@@ -222,7 +222,7 @@ std::string Server::_setOper(Request request, int i)
         return _printMessage("461", this->_clients[i]->getNickName(), "PASS :Not enough parameters");
     }
 
-    if (request.args[0] != "ADMIN" || request.args[1] != "BOT") 
+    if (request.args[0] != "ADMIN" || request.args[1] != "BATMAN") 
 	{
         // 464: ERR_PASSWDMISMATCH - Username/Password incorrect
         return _printMessage("464", this->_clients[i]->getNickName(), ":Username/Password incorrect");
@@ -245,9 +245,6 @@ std::string	Server::_setPassWord(Request request, int i)
 		this->_clients[i]->setAuth(true); // Set the client as authenticated
 	return ("");
 };
-
-
-
 
 std::string Server::_setNickName(Request request, int i) 
 {
@@ -322,7 +319,7 @@ std::string Server::_setUserName(Request request, int i)
     if (request.args.size() < 4) 
 	{
         // 461: ERR_NEEDMOREPARAMS - Not enough parameters provided for the command
-        return _printMessage("461", this->_clients[i]->getNickName(), "USER :Not enough parameters");
+        return _printMessage("461", this->_clients[i]->getNickName(), "command should be USER <username> <mode> <unused> <realname>");
     }
 
     this->_clients[i]->setUserName(request.args[0]);

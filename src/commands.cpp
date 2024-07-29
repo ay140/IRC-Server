@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 14:13:29 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:36:45 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,10 +219,10 @@ std::string Server::_setOper(Request request, int i)
     if (request.args.size() < 2) 
 	{
         // 461: ERR_NEEDMOREPARAMS - Not enough parameters provided for the command
-        return _printMessage("461", this->_clients[i]->getNickName(), "PASS :Not enough parameters");
+        return _printMessage("461", this->_clients[i]->getNickName(), "PASS :Not enough parameters, should be OPER <username> <password>");
     }
 
-    if (request.args[0] != "ADMIN" || request.args[1] != "BOT") 
+    if (request.args[0] != "ADMIN" || request.args[1] != "BATMAN") 
 	{
         // 464: ERR_PASSWDMISMATCH - Username/Password incorrect
         return _printMessage("464", this->_clients[i]->getNickName(), ":Username/Password incorrect");
@@ -320,7 +320,7 @@ std::string Server::_setUserName(Request request, int i)
     if (request.args.size() < 4) 
 	{
         // 461: ERR_NEEDMOREPARAMS - Not enough parameters provided for the command
-        return _printMessage("461", this->_clients[i]->getNickName(), "USER :Not enough parameters");
+        return _printMessage("461", this->_clients[i]->getNickName(), "command should be USER <username> <mode> <unused> <realname>");
     }
 
     this->_clients[i]->setUserName(request.args[0]);
