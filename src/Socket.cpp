@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:12 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 09:13:06 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 09:20:59 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ void Server::_getSocket(const std::string& port)
     status = getaddrinfo("0.0.0.0", port.c_str(), &hint, &serverinfo);
     if (status != 0) 
 	{
-        std::cerr << "getaddrinfo() error: " << gai_strerror(status) << std::endl;
-        exit(EXIT_FAILURE);
+        throw std::runtime_error(std::string("getaddrinfo() error: ") + gai_strerror(status));
     }
 
     for (tmp = serverinfo; tmp != NULL; tmp = tmp->ai_next) 
