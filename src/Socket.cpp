@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:12 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 21:31:45 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 09:13:06 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,20 @@ void Server::_getSocket(const std::string& port)
     memset(&hint, 0, sizeof(hint));
     hint.ai_family = AF_INET;
     hint.ai_socktype = SOCK_STREAM;
-    hint.ai_protocol = getprotobyname("TCP")->p_proto;
+
+    // Added check for getprotobyname
+    struct protoent *proto = getprotobyname("TCP");
+    if (proto == NULL) 
+    {
+        throw std::runtime_error("getprotobyname() error: " + std::string(strerror(errno)));
+    }
+    hint.ai_protocol = proto->p_proto;
 
     status = getaddrinfo("0.0.0.0", port.c_str(), &hint, &serverinfo);
     if (status != 0) 
 	{
-        throw std::runtime_error(std::string("getaddrinfo() error: ") + gai_strerror(status));
+        std::cerr << "getaddrinfo() error: " << gai_strerror(status) << std::endl;
+        exit(EXIT_FAILURE);
     }
 
     for (tmp = serverinfo; tmp != NULL; tmp = tmp->ai_next) 
@@ -58,7 +66,6 @@ void Server::_getSocket(const std::string& port)
     if (tmp == NULL) 
 	{
         throw std::runtime_error(std::string("bind() error: ") + strerror(errno));
-
     }
 
     if (listen(this->_socketfd, this->_max_online_c) == -1) 
@@ -66,6 +73,7 @@ void Server::_getSocket(const std::string& port)
         throw std::runtime_error(std::string("listen() error: ") + strerror(errno));
     }
 }
+
 
 std::string fillIt(const std::string& str, size_t len) 
 {
