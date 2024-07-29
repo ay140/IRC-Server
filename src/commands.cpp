@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 14:36:45 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:10:40 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ std::string Server::_setMode(Request request, int i)
 		{
             ret = _printUserModes(ret, i);
         }
-        ret.append("461 ERR_NEEDMOREPARAMS :Not enough parameters\n");
+        ret.append("461 ERR_NEEDMOREPARAMS :Not enough parameters useage: MODE <nickname> <mode>\n");
         return ret;
     }
 
