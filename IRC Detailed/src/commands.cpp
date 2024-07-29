@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 13:44:01 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:15:47 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 std::string Server::_parsing(const std::string& message, int i) 
 {
     Request request(_splitRequest(message));
-
+        // send the request object to the appropriate function with the client fd as an argument.
     if (request.invalidMessage)
         return "Invalid message!\n";
-    if (request.command == "PASS") // send
+    if (request.command == "PASS")
         return _setPassWord(request, i);
     else if (request.command == "NICK")
         return _setNickName(request, i);
@@ -235,14 +235,14 @@ std::string Server::_setOper(Request request, int i)
 
 std::string	Server::_setPassWord(Request request, int i)
 {
-	if (request.args.size() < 1)
+	if (request.args.size() < 1) // If the password is not provided, return an error message
 		return (_printMessage("461", this->_clients[i]->getNickName(), "PASS :Not enough parameters"));
-	if (this->_clients[i]->getRegistered())
+	if (this->_clients[i]->getRegistered()) // If the client is already registered, return an error message
 		return (_printMessage("462", this->_clients[i]->getNickName(), ":Unauthorized command (already registered)"));
-	if (request.args[0] != this->_password)
+	if (request.args[0] != this->_password) // If the password is incorrect, return an error message
 		return (_printMessage("997", this->_clients[i]->getNickName(), ":Incorrect password"));
-	else
-		this->_clients[i]->setAuth(true);
+	else // If the password is correct, set the client as authenticated
+		this->_clients[i]->setAuth(true); // Set the client as authenticated
 	return ("");
 };
 
@@ -251,18 +251,31 @@ std::string	Server::_setPassWord(Request request, int i)
 
 std::string Server::_setNickName(Request request, int i) 
 {
-    if (!this->_clients[i]->getAuth()) 
+    if (!this->_clients[i]->getAuth()) // if the user is not authenticated -> didn't register the password yet
 	{
         // 998: Custom error for authentication required
         return _printMessage("998", this->_clients[i]->getNickName(), ":You need to authenticate first");
     }
 
-    if (request.args.size() < 1) 
+    if (request.args.size() < 1) // if the nickname is not provided, return an error message
 	{
         // 431: ERR_NONICKNAMEGIVEN - No nickname given
         return _printMessage("431", this->_clients[i]->getNickName(), ":No nickname given");
     }
 
+    if (request.args.size() > 1) 
+	{
+        // 431: ERR_NONICKNAMEGIVEN - No nickname given
+        return _printMessage("431", this->_clients[i]->getNickName(), ":NICK should be only one Parameter");
+    }
+
+    // Check if the client has already set a nickname
+    if (!this->_clients[i]->getNickName().empty()) 
+    {
+        // 999: Custom error for nickname already set
+        return _printMessage("999", this->_clients[i]->getNickName(), ":Nickname can only be set once");
+    }
+    
     const std::string& nickName = request.args[0];
     for (std::string::const_iterator it = nickName.begin(); it != nickName.end(); ++it) 
 	{

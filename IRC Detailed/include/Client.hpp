@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 15:49:58 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 14:03:39 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,19 @@ class Client
 		Client();
 		Client(const Client & x);
 		Client& operator=(const Client & rhs);
-		int									_clientfd;
-		bool								_Auth;
-		bool								_Registered;
-		bool								_isOperator;
-		std::string							_NickName;
-		std::string							_UserName;
-		std::string							_FullName;
+		int									_clientfd; // socket file descriptor for the client
+		bool								_Auth; // 0 if not authenticated, 1 if authenticated for the client
+		bool								_Registered; // 0 if not registered, 1 if registered for the client
+		bool								_isOperator; // 0 if not operator, 1 if operator for the client
+		std::string							_NickName; // nickname of the client
+		std::string							_UserName; // username of the client
+		std::string							_FullName; // full name of the client
 		std::string							_ID;
 		const std::string					_Host;
-		struct sockaddr_storage				_remotaddr;
-		socklen_t							_addrlen;
-		struct Modes						_modes;
-		std::map<std::string, Channel *>	_joinedChannels;
+		struct sockaddr_storage				_remotaddr; // remote address of the client
+		socklen_t							_addrlen; // length of the remote address
+		struct Modes						_modes; // modes of the client
+		std::map<std::string, Channel *>	_joinedChannels; // channels joined by the client
 
 	public:
 		Client(int fd);

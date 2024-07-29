@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/28 20:55:00 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 14:13:29 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,12 @@ std::string Server::_setNickName(Request request, int i)
         return _printMessage("431", this->_clients[i]->getNickName(), ":No nickname given");
     }
 
+    if (request.args.size() > 1) 
+	{
+        // 431: ERR_NONICKNAMEGIVEN - No nickname given
+        return _printMessage("431", this->_clients[i]->getNickName(), ":NICK should be only one Parameter");
+    }
+    
     // Check if the client has already set a nickname
     if (!this->_clients[i]->getNickName().empty()) 
     {
