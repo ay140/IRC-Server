@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/28 20:29:55 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 13:44:01 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::string Server::_parsing(const std::string& message, int i)
 
     if (request.invalidMessage)
         return "Invalid message!\n";
-    if (request.command == "PASS")
+    if (request.command == "PASS") // send
         return _setPassWord(request, i);
     else if (request.command == "NICK")
         return _setNickName(request, i);
