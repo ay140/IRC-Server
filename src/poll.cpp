@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/28 20:58:00 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 07:19:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ void Server::_addToPoll(int newfd)
         struct pollfd* new_pfds = (struct pollfd*)realloc(this->_pfds, sizeof(struct pollfd) * this->_max_online_c);
         if (new_pfds == NULL) 
 		{
-            std::cerr << "realloc() error: " << strerror(errno) << std::endl;
-            exit(1); // Exit on memory allocation failure
+            throw std::runtime_error("realloc() error: " + std::string(strerror(errno)));
         }
         this->_pfds = new_pfds;
     }

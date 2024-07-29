@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 06:54:28 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/29 07:17:17 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,16 @@ void Server::_newClient(void)
         throw std::runtime_error(std::string("fcntl() error: ") + strerror(errno));
     }
     
+    try 
+    {
     _addToPoll(newfd);
+    } 
+    catch (const std::exception& e) 
+    {
+        close(newfd);
+        throw; // Rethrow the exception to be caught in startServer
+    }
+    
     this->_clients[newfd] = new Client(newfd); // Ensure correct client initialization
 
     std::string welcome = _welcomemsg();
