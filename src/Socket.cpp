@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:12 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 09:20:59 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 09:22:12 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void Server::_getSocket(const std::string& port)
     }
 }
 
-
 std::string fillIt(const std::string& str, size_t len) 
 {
     std::string result = str;
@@ -88,7 +87,6 @@ std::string fillIt(const std::string& str, size_t len)
     }
     return result;
 }
-
 
 const std::string currentDateTime()
 {
