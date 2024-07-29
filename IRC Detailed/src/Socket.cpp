@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:12 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 22:35:00 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 09:25:22 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@ void Server::_getSocket(const std::string& port)
     memset(&hint, 0, sizeof(hint)); // Initialize the hint struct to zero.
     hint.ai_family = AF_INET; // specifies that the address family should be IPv4.
     hint.ai_socktype = SOCK_STREAM; // specifies that the socket type should be a stream socket.
-    hint.ai_protocol = getprotobyname("TCP")->p_proto; // specifies that the protocol should be TCP.
+    
+    struct protoent *proto = getprotobyname("TCP"); // get the TCP protocol.
+    if (proto == NULL) // check if getprotobyname was successful.
+    {
+        throw std::runtime_error("getprotobyname() error: " + std::string(strerror(errno)));
+    }
+    hint.ai_protocol = proto->p_proto;
 
     status = getaddrinfo("0.0.0.0", port.c_str(), &hint, &serverinfo);
     /*

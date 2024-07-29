@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/28 20:55:40 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 09:49:50 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,11 @@ Server::~Server()
     }
 }
 
+std::string	Server::_getPassword() const 
+{ 
+    return (this->_password); 
+};
+
 std::string Server::_welcomemsg(void)
 {
     std::string welcome = RED;
@@ -205,8 +210,7 @@ void Server::startServer(void)
         int poll_count = poll(this->_pfds, this->_online_c, -1);
         if (poll_count == -1) 
         {
-            std::cout << "poll() error: " << strerror(errno) << std::endl;
-            exit(EXIT_FAILURE);
+                throw std::runtime_error(std::string("poll() error: ") + strerror(errno));
         }
 
         for (int i = 0; i < this->_online_c; ++i) 
@@ -225,8 +229,3 @@ void Server::startServer(void)
         }
     }
 }
-
-std::string	Server::_getPassword() const 
-{ 
-    return (this->_password); 
-};

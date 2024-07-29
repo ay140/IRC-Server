@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/28 19:40:28 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 09:45:46 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,11 +204,17 @@ void Server::_newClient(void) {
               << " on socket " << newfd << std::endl;
 }
 
+std::string	Server::_getPassword() const 
+{ 
+    return (this->_password); 
+};
+
+
 void Server::startServer(void) 
 {
     while (true) 
     {
-        int poll_count = poll(this->_pfds, this->_online_c, -1);
+        int poll_count = poll(this->_pfds, this->_online_c, -1); // update the pollfd array
         if (poll_count == -1) 
         {
             std::cout << "poll() error: " << strerror(errno) << std::endl;
@@ -232,7 +238,31 @@ void Server::startServer(void)
     }
 }
 
-std::string	Server::_getPassword() const 
-{ 
-    return (this->_password); 
-};
+/*
+The poll function is a system call in Unix-like operating systems that waits for events on a set of file descriptors.
+ It is commonly used in network programming to manage multiple connections simultaneously, allowing a program to be notified when
+  a file descriptor is ready for I/O operations (e.g., ready to read or write data).
+
+The poll function takes three arguments:
+
+int poll(struct pollfd *fds, nfds_t nfds, int timeout);
+fds: Pointer to an array of pollfd structures, which specify the file descriptors to be monitored and the types of events to look for.
+nfds: Number of file descriptors in the fds array.
+timeout: Specifies the timeout period in milliseconds. A value of -1 makes poll wait indefinitely, 0 makes it return immediately, 
+and a positive value specifies the number of milliseconds to wait.
+
+poll waits for events on the file descriptors. The events could be:
+
+POLLIN: Data is available to read.
+POLLOUT: Data can be written without blocking.
+POLLERR: An error occurred.
+POLLHUP: The file descriptor was hung up.
+
+What Happens When poll Detects an Event?
+
+1- Waiting for Events: The poll function blocks until one of the file descriptors in the fds array has an event.
+2- Event Detection: When an event occurs on a file descriptor, poll sets the revents field of the corresponding pollfd structure to indicate the event.
+3- Returning from poll: The poll function returns the number of file descriptors that have events. If the timeout expires, poll returns 0.
+
+
+*/
