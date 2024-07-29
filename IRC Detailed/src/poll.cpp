@@ -3,32 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/28 20:33:48 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/29 11:28:04 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-void Server::_addToPoll(int newfd) {
-    if (this->_online_c == this->_max_online_c) 
+void Server::_addToPoll(int newfd) 
+{
+    if (this->_online_c == this->_max_online_c) // If we have reached the maximum number of clients
 	{
-        this->_max_online_c *= 2;
-        struct pollfd* new_pfds = (struct pollfd*)realloc(this->_pfds, sizeof(struct pollfd) * this->_max_online_c);
-        if (new_pfds == NULL) 
+        this->_max_online_c *= 2; // Double the maximum number of clients
+        struct pollfd* new_pfds = (struct pollfd*)realloc(this->_pfds, sizeof(struct pollfd) * this->_max_online_c); // Reallocate memory for the new maximum number of clients
+        if (new_pfds == NULL) // If realloc() fails
 		{
-            std::cerr << "realloc() error: " << strerror(errno) << std::endl;
-            exit(1); // Exit on memory allocation failure
+            throw std::runtime_error("realloc() error: " + std::string(strerror(errno)));
         }
         this->_pfds = new_pfds;
     }
-    this->_pfds[this->_online_c].fd = newfd;
-    this->_pfds[this->_online_c].events = POLLIN;
-    this->_clients.insert(std::make_pair(newfd, new Client(newfd)));
+
+    try 
+    {
+    this->_pfds[this->_online_c].fd = newfd; // update the pollfd struct with the new file descriptor for client
+    this->_pfds[this->_online_c].events = POLLIN; // Set the events to poll for to POLLIN (data to read)
+    this->_clients.insert(std::make_pair(newfd, new Client(newfd))); // Add the new client to the clients map
     this->_online_c++;
+    } 
+    catch (const std::exception &e) 
+    {
+        std::cerr << "Memory allocation failed: " << e.what() << std::endl;
+        throw;  // Rethrow the exception to be handled by the caller
+    }
 }
+
+
 void Server::_removeFromPoll(int index) {
     if (index < 0 || index >= this->_online_c) {
         std::cout << "Invalid index for _removeFromPoll: " << index << std::endl;

@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 09:50:44 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:44:52 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,34 +174,98 @@ std::string	Server::_printMessage(std::string num, std::string nickname, std::st
 	return (":" + this->_name + " " + num + " " + nickname + " " + message + "\n");
 }
 
-void Server::_newClient(void) {
-    struct sockaddr_storage remotaddr;
+void Server::_newClient(void) 
+{
+    struct sockaddr_storage remotaddr; // Client address
     socklen_t addrlen = sizeof remotaddr;
-    int newfd = accept(this->_socketfd, (struct sockaddr*)&remotaddr, &addrlen);
+    /*
+    struct sockaddr_storage remotaddr: sockaddr_storage is a data structure large enough to hold any type of socket address. 
+    It's used for portability and flexibility when dealing with different types of socket addresses (e.g., IPv4, IPv6).
     
-    if (newfd == -1) {
-        std::cout << "accept() error: " << strerror(errno) << std::endl;
-        return;
+    example:
+    struct sockaddr_in client_addr;
+        client_addr.sin_family = AF_INET;
+        client_addr.sin_port = htons(12345); // Port number in network byte order
+        inet_pton(AF_INET, "192.168.1.10", &(client_addr.sin_addr)); // Convert IP address to binary form
+    
+    remotaddr is the variable that will store the address information of the connecting client.
+    socklen_t addrlen = sizeof remotaddr:
+    socklen_t is a data type used to represent the length of a socket address.
+    addrlen is a variable that will hold the size of the address. It is initialized to the size of the remotaddr structure. 
+    This is required by the accept() function to specify the size of the buffer that will hold the client address information.
+    */
+    int newfd = accept(this->_socketfd, (struct sockaddr*)&remotaddr, &addrlen);
+    /*
+    accept() function: This function accepts a new client connection from the server socket (_socketfd). It fills the remotaddr 
+    structure with the client's address information and returns a new file descriptor (newfd) for the client socket.
+    */
+    if (newfd == -1) 
+    {
+        throw std::runtime_error(std::string("accept() error: ") + strerror(errno));
+
     }
     
     // Set the new socket to non-blocking mode
-    if (fcntl(newfd, F_SETFL, O_NONBLOCK) == -1) {
-        std::cout << "fcntl() error: " << strerror(errno) << std::endl;
+    if (fcntl(newfd, F_SETFL, O_NONBLOCK) == -1) 
+    {
         close(newfd);
-        return;
+        throw std::runtime_error(std::string("fcntl() error: ") + strerror(errno));    
+    /*
+        fcntl(newfd, F_SETFL, O_NONBLOCK) is a system call that manipulates the file descriptor newfd.
+        fcntl stands for "file control".
+        The F_SETFL command is used to set the file status flags.
+        O_NONBLOCK is a flag that makes the file descriptor non-blocking.
+        
+    Non-blocking Mode:
+    When a file descriptor is set to non-blocking mode, operations that would normally block (like reading from an empty socket or writing to a full socket) will return immediately with a special error code (usually EAGAIN or EWOULDBLOCK) instead of blocking the execution.
+    This is useful in a server context to avoid blocking the entire server while waiting for I/O operations on a single socket.
+        
+    when a file descriptor is set to non-blocking mode, read() and write() system calls will return immediately if there is no data to read or if the write buffer is full.
+        
+    In the context of a server handling multiple clients, setting sockets to non-blocking mode ensures that the server can continue to process other clients even if one client 
+    is slow or unresponsive. Without non-blocking mode, a single slow client could potentially block the entire server, reducing its responsiveness and scalability.
+    
+    Without Non-blocking Mode: If one client is slow and the server tries to read data from it, the server will block and wait for the data, even if 99 other clients are ready and waiting. 
+    This blocking behavior can degrade the performance and responsiveness of the server.
+
+    With Non-blocking Mode: The server can attempt to read data from the slow client. If no data is available, the read operation returns immediately with an error indicating that it would block. 
+    The server can then continue processing other clients, ensuring that it remains responsive and can handle multiple clients efficiently.
+    
+    */
     }
     
+    try 
+    {
     _addToPoll(newfd);
-    this->_clients[newfd] = new Client(newfd); // Ensure correct client initialization
+    } 
+    catch (const std::exception& e) 
+    {
+        close(newfd);
+        throw; // Rethrow the exception to be caught in startServer
+    }
+    // this->_clients[newfd] = new Client(newfd); // Ensure correct client initialization
 
     std::string welcome = _welcomemsg();
-    if (send(newfd, welcome.c_str(), welcome.length(), 0) == -1) {
+    if (send(newfd, welcome.c_str(), welcome.length(), 0) == -1) 
+    {
+        /*
+        send function is a system call used in network programming to send data over a socket. It sends data to a connected socket identified by a file descriptor (fd).
+        Parameters
+        sockfd: This is the file descriptor of the socket to which you want to send data. The socket should be connected to a remote socket.
+        buf: This is a pointer to the buffer containing the data you want to send.
+        len: This specifies the length of the data in bytes.
+        flags: This is used to specify the type of transmission. Commonly set to 0, but can be used to modify the behavior of the send operation (e.g., MSG_DONTWAIT to make the operation non-blocking).
+        */
         std::cout << "send() error: " << strerror(errno) << std::endl;
     }
     
-    std::cout << "[" << currentDateTime() << "]: new connection from "
-              << inet_ntoa(((struct sockaddr_in*)&remotaddr)->sin_addr)
-              << " on socket " << newfd << std::endl;
+    std::cout << "[" << currentDateTime() << "]: new connection from " << inet_ntoa(((struct sockaddr_in*)&remotaddr)->sin_addr) << " on socket " << newfd << std::endl;
+
+    /*
+    currentDateTime() is called to get the current date and time as a string. This function formats the current date and time and returns it as a string.
+    inet_ntoa converts an IPv4 address from its numerical binary form (in network byte order) into a string in the dotted-decimal format (e.g., "192.168.1.1").
+    
+    */
 }
 
 std::string	Server::_getPassword() const 
@@ -215,17 +279,18 @@ void Server::startServer(void)
     while (true) 
     {
         int poll_count = poll(this->_pfds, this->_online_c, -1); // update the pollfd array
-        if (poll_count == -1) 
+        if (poll_count == -1) // poll count should be -1 on error otherwise it is the number of file descriptors that have events which is equal to the number of online clients
         {
-                throw std::runtime_error(std::string("poll() error: ") + strerror(errno));
+            throw std::runtime_error(std::string("poll() error: ") + strerror(errno));
         }
 
-        for (int i = 0; i < this->_online_c; ++i) 
+        for (int i = 0; i < this->_online_c; ++i) // loop through the pollfd array
         {
-            if (this->_pfds[i].revents & POLLIN) 
+            if (this->_pfds[i].revents & POLLIN) // check if the file descriptor has an event and the event is data to read
             {
-                if (this->_pfds[i].fd == this->_socketfd) 
+                if (this->_pfds[i].fd == this->_socketfd) // listening for new connections, if new connection is detected this means that this->_pfds[i].fd and socket fd is the same. 
                 {
+                    // in this condition pfds[i].fd is the server socket and we have a new connection -> client will always use the server socket for new connections
                     _newClient(); // Handle new connection
                 } 
                 else 
