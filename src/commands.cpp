@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 11:37:11 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 17:22:06 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -408,7 +408,8 @@ std::string Server::_quit(Request request, int i)
         ret.append("\n");
     std::map<std::string, Channel *> channels = this->_clients[i]->getJoinedChannels();
     std::map<std::string, Channel *>::iterator it = channels.begin();
-    while (it != channels.end()) {
+    while (it != channels.end()) 
+    {
         _sendToAllUsers(it->second, i, ret);
         it++;
     }

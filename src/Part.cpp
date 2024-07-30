@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PartCommand.cpp                                    :+:      :+:    :+:   */
+/*   Part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:27:43 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 21:49:54 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 17:05:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int Server::_partChannel(const std::string& channelName, int fd, const std::stri
         }
         _sendToAllUsers(itCh->second, fd, reply);
     }
+    std::string confirmation = ":You have successfully left the channel " + channelName + "\n";
+    _sendall(fd, confirmation);
 
     return 0;
 }
@@ -72,7 +74,7 @@ std::string Server::_part(Request request, int fd)
     if (request.args.empty()) 
 	{
         // 461: ERR_NEEDMOREPARAMS - Not enough parameters provided for the command
-        return _printMessage("461", this->_clients[fd]->getNickName(), ":Not enough parameters");
+        return _printMessage("461", this->_clients[fd]->getNickName(), ":Not enough parameters, useage: PART <channel>{,<channel>} [<message>]");
     }
 
     std::vector<std::string> parsChannels = _commaSeparator(request.args[0]);

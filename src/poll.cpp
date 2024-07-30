@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 11:37:02 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 17:21:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void Server::_addToPoll(int newfd)
     }
 }
 
-
 void Server::_removeFromPoll(int index) 
 {
     if (index < 0 || index >= this->_online_c) 
@@ -55,12 +54,8 @@ void Server::_removeFromPoll(int index)
         std::cout << "Invalid index for _removeFromPoll: " << index << std::endl;
         return;
     }
-    
     int fd_to_remove = this->_pfds[index].fd;
-    
     close(fd_to_remove);
-
-    // Remove from clients map and nicknames list
     std::map<int, Client*>::iterator it = this->_clients.find(fd_to_remove);
     if (it != this->_clients.end()) 
     {
@@ -69,25 +64,6 @@ void Server::_removeFromPoll(int index)
         {
             this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
         }
-        // Remove the client from all channels they are part of
-        // std::map<std::string, Channel *> channels = it->second->getJoinedChannels();
-        // std::map<std::string, Channel *>::iterator itChannel = channels.begin();
-        // while (itChannel != channels.end()) 
-        // {
-        //     std::string channelName = itChannel->first;
-        //     Channel *channel = itChannel->second;
-        //     channel->removeMember(fd_to_remove);
-        //     std::cout << "Removed " << nickname << " from channel " << channelName << std::endl;
-        //     // Check if the channel is empty
-        //     if (channel->isEmpty()) 
-        //     {
-        //         std::cout << "Channel " << channelName << " is empty. Deleting it." << std::endl;
-        //         delete channel;
-        //         this->_allChannels.erase(channelName);
-        //     }
-
-        //     ++itChannel;
-        // }
         delete it->second;
         this->_clients.erase(it);
     } 
@@ -95,13 +71,12 @@ void Server::_removeFromPoll(int index)
     {
         std::cout << "Error: FD not found in _clients map: " << fd_to_remove << std::endl;
     }
-
     // Move the last element to the position of the element to remove
     if (index != this->_online_c - 1) 
     {
         this->_pfds[index] = this->_pfds[this->_online_c - 1];
     }
     this->_online_c--;
-
-    std::cout << "Removed fd: " << fd_to_remove << " from poll and clients map. Current online count: " << this->_online_c << std::endl;
+    
+    std::cout << "Removed fd: " << fd_to_remove << " from poll and clients map. Current online count: " << this->_online_c - 1 << std::endl;
 }

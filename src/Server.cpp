@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 07:35:19 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 17:10:57 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,5 +242,24 @@ void Server::startServer(void)
                 }
             }
         }
+    }
+}
+
+void Server::monitorChannels() 
+{
+    std::vector<std::string> emptyChannels;
+    for (std::map<std::string, Channel*>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it) 
+    {
+        if (it->second->isEmpty()) 
+        {
+            emptyChannels.push_back(it->first);
+        }
+    }
+
+    for (std::vector<std::string>::iterator it = emptyChannels.begin(); it != emptyChannels.end(); ++it) 
+    {
+        delete this->_allChannels[*it];
+        this->_allChannels.erase(*it);
+        std::cout << "Deleted empty channel: " << *it << std::endl;
     }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:45 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 11:25:43 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 16:49:50 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,24 +148,23 @@ void Client::leaveChannel(const std::string& channelName)
 
 std::string Client::leaveAllChannels() 
 {
-    std::map<std::string, Channel*>::iterator it = this->_joinedChannels.begin();
-    while (it != this->_joinedChannels.end()) 
-	{
+    while (!this->_joinedChannels.empty()) 
+    {
+        std::map<std::string, Channel*>::iterator it = this->_joinedChannels.begin();
         std::pair<Client*, int> user = it->second->findUserRole(this->_clientfd);
         if (user.second == 0) 
-		{
+        {
             it->second->removeMember(this->_clientfd);
         } 
-		else if (user.second == 1) 
-		{
+        else if (user.second == 1) 
+        {
             it->second->removeOperator(this->_clientfd);
         } 
-		else 
-		{
+        else 
+        {
             it->second->removeVoice(this->_clientfd);
         }
         user.first->leaveChannel(it->second->getName());
-        it = this->_joinedChannels.begin();
     }
     return "";
 }

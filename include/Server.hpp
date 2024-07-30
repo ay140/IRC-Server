@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 08:47:15 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:20:35 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ class Server
 		std::string _handleWHOIS(Request request, int i);
 		std::string _handlePING(Request request, int i);
 		std::string _handleCAP(Request request, int i);
-
+		void 				monitorChannels();
 };
 
 template <typename T>
