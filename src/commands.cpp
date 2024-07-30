@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 11:15:31 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:49:33 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ std::string Server::_topic(Request request, int i)
     if (request.args.empty()) 
 	{
         // 461: ERR_NEEDMOREPARAMS - Not enough parameters provided for the command
-        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters");
+        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters useage: TOPIC <channel> [<topic>]");
     }
 
     std::map<std::string, Channel*>::iterator it = this->_allChannels.find(request.args[0]);

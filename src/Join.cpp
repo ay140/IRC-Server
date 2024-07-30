@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   JoinCommand.cpp                                    :+:      :+:    :+:   */
+/*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:27 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 12:05:39 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 12:33:40 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ std::string Server::_joinChannel(Request request, int fd)
     if (request.args.empty()) 
 	{
         // 461: ERR_NEEDMOREPARAMS - Not enough parameters provided for the command
-        return _printMessage("461", this->_clients[fd]->getNickName(), ":Not enough parameters");
+        return _printMessage("461", this->_clients[fd]->getNickName(), ":Not enough parameters, useage: JOIN <#channel>{,<#channel>} [<key>{,<key>}]");
     }
 
     if (request.args[0] == "0") 
@@ -44,6 +44,12 @@ std::string Server::_joinChannel(Request request, int fd)
 
     while (itChannels != parsChannels.end() && result == 1) 
 	{
+                // Check if the user is already joined to the channel
+        if (this->_clients[fd]->isJoined(*itChannels)) 
+        {
+            return _printMessage("443", this->_clients[fd]->getNickName(), *itChannels + " :You're already on that channel");
+        }
+        
         if (itKeys != parsKeys.end()) 
 		{
             result = _createPrvChannel(*itChannels, *itKeys, fd);
@@ -54,26 +60,38 @@ std::string Server::_joinChannel(Request request, int fd)
             result = _createChannel(*itChannels, fd);
         }
 
-        switch (result) 
-		{
-            case BADCHANMASK:
-                return _printMessage("476", this->_clients[fd]->getNickName(), *itChannels + " :Bad Channel Mask");
-            case BANNEDFROMCHAN:
-                return _printMessage("474", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+b)");
-            case TOOMANYCHANNELS:
-                return _printMessage("405", this->_clients[fd]->getNickName(), *itChannels + " :You have joined too many channels");
-            case BADCHANNELKEY:
-                return _printMessage("475", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+k)");
-            case CHANNELISFULL:
-                return _printMessage("471", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+l)");
-            case NOSUCHCHANNEL:
-                return _printMessage("403", this->_clients[fd]->getNickName(), *itChannels + " :No such channel");
-            default:
-                break;
+        if (result == BADCHANMASK)
+        {
+            return _printMessage("476", this->_clients[fd]->getNickName(), *itChannels + " :Bad Channel Mask");
         }
+        else if (result == BANNEDFROMCHAN)
+        {
+            return _printMessage("474", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+b)");
+        }
+        else if (result == TOOMANYCHANNELS)
+        {
+            return _printMessage("405", this->_clients[fd]->getNickName(), *itChannels + " :You have joined too many channels");
+        }
+        else if (result == BADCHANNELKEY)
+        {
+            return _printMessage("475", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+k)");
+        }
+        else if (result == CHANNELISFULL)
+        {
+            return _printMessage("471", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+l)");
+        }
+        else if (result == NOSUCHCHANNEL)
+        {
+            return _printMessage("403", this->_clients[fd]->getNickName(), *itChannels + " :No such channel");
+        }
+        else if (!this->_clients[fd]->isJoined(*itChannels))
+        {
+            return _printMessage("999", this->_clients[fd]->getNickName(), *itChannels + " :Failed to join channel");
+        }
+
         itChannels++;
     }
-
+        
     return "";
 }
 
@@ -142,6 +160,14 @@ int Server::_createPrvChannel(const std::string& channelName, const std::string&
     } 
 	else 
 	{
+        if (it->second->getKey().empty())
+        {
+            if (channelKey.empty()) 
+            {
+                std::cout << "No key provided for a protected channel" << std::endl;
+                return BADCHANNELKEY; // No key provided for a protected channel
+            }
+        }
         if (it->second->getKey() == channelKey) 
 		{
             int result = 0;

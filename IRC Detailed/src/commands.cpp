@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 10:56:23 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:46:47 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ std::string Server::_parsing(const std::string& message, int i)
     else if (request.command == "HELP")
         return _printHelpInfo();
     else if (request.command == "JOIN")
+        return _joinChannel(request, i);
+    else if (request.command == "TOPIC")
         return _topic(request, i);
     else if (request.command == "KICK")
         return _kick(request, i);
