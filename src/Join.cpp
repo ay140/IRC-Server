@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:27 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 12:33:40 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:45:47 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,12 @@ std::string Server::_joinChannel(Request request, int fd)
 	{
         return this->_clients[fd]->leaveAllChannels();
     }
-
+    
     std::vector<std::string> parsChannels = _commaSeparator(request.args[0]);
+    if (request.args.size() > 2) 
+    {
+        return _printMessage("999", this->_clients[fd]->getNickName(), ":too many arguments, useage: JOIN <#channel>{,<#channel>} [<key>{,<key>}]");
+    }
     std::vector<std::string> parsKeys;
     if (request.args.size() == 2) 
 	{
