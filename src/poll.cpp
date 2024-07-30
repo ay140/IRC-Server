@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 08:47:11 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 09:35:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,20 @@ void Server::_addToPoll(int newfd)
     if (this->_online_c == this->_max_online_c) 
 	{
         this->_max_online_c *= 2;
-        struct pollfd* new_pfds = (struct pollfd*)realloc(this->_pfds, sizeof(struct pollfd) * this->_max_online_c);
+        struct pollfd* new_pfds = new struct pollfd[this->_max_online_c];
         if (new_pfds == NULL) 
-		{
-            throw std::runtime_error("realloc() error: " + std::string(strerror(errno)));
+        {
+            std::cerr << "new[] allocation error: " << strerror(errno) << std::endl;
+            throw std::runtime_error("Memory allocation failed in _addToPoll");
         }
+        for (int i = this->_online_c; i < this->_max_online_c; ++i) 
+        {
+            new_pfds[i].fd = -1;
+            new_pfds[i].events = 0;
+            new_pfds[i].revents = 0;
+        }
+        std::memcpy(new_pfds, this->_pfds, sizeof(struct pollfd) * this->_online_c);
+        delete[] this->_pfds;
         this->_pfds = new_pfds;
     }
     try
