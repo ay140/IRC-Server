@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:02 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 09:36:28 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 23:15:58 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void Server::_ClientRequest(int index)
     } 
     else 
     {
-        buf[nbytes] = '\0'; // Null-terminate the received data
+        buf[nbytes] = '\0';
         std::string message(buf);
 
         // Remove trailing '\r' or '\n' if present
@@ -87,7 +87,7 @@ void Server::_ClientRequest(int index)
             std::cout << "send() error: " << strerror(errno) << std::endl;
         }
     }
-    memset(buf, 0, sizeof(buf)); // Clear the buffer
+    memset(buf, 0, sizeof(buf));
 }
 
 Request Server::_splitRequest(const std::string& req) 

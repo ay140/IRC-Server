@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 17:22:06 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 23:13:52 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ std::string Server::_handleWHOIS(Request request, int i)
 {
     if (!this->_clients[i]->getRegistered()) 
     {
-        // 451: ERR_NOTREGISTERED - Client must register before performing this action
         return _printMessage("451", this->_clients[i]->getNickName(), ":You have not registered");
     }
     if (request.args.size() < 1) 
@@ -98,8 +97,9 @@ std::string Server::_handlePING(Request request, int i)
 std::string Server::_handleCAP(Request request, int i) 
 {
     (void)i;
-    if (request.args.size() == 0) {
-        return "CAP * LS :\n"; // Empty response for CAP without arguments
+    if (request.args.size() == 0) 
+    {
+        return "CAP * LS :\n";
     }
     if (request.args.size() > 1 && request.args[0] == "LS" && request.args[1] == "302") {
         return "CAP * LS :multi-prefix sasl account-notify extended-join\n";
@@ -124,7 +124,6 @@ std::string Server::_notice(Request request, int i)
     const std::string& target = request.args[0];
     const std::string& message = request.args[1];
 
-    // Check if the target user exists
     int userFd = _findFdByNickName(target);
     if (userFd == USERNOTFOUND) 
 	{
@@ -171,7 +170,8 @@ std::string Server::_topic(Request request, int i)
     Channel* channel = it->second;
     if (request.args.size() == 1) 
 	{
-        if (channel->getTopic().empty()) {
+        if (channel->getTopic().empty()) 
+        {
             // 331: RPL_NOTOPIC - No topic is set
             return _printMessage("331", this->_clients[i]->getNickName(), request.args[0] + " :No topic is set");
         } 

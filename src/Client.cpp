@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:45 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 16:49:50 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 23:11:42 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 Client::Client()
     : _clientfd(0), _Auth(false), _Registered(false), _isOperator(false),
-      _NickName(), _UserName(), _FullName(), _ID(), _Host("gotham"),
+      _NickName(""), _UserName(""), _FullName(""), _ID(""), _Host("gotham"),
       _remotaddr(), _addrlen(), _modes(), _joinedChannels() {}
 
 Client::Client(int fd)
     : _clientfd(fd), _Auth(false), _Registered(false), _isOperator(false),
-      _NickName(), _UserName(), _FullName(), _ID(), _Host("gotham"),
+      _NickName(""), _UserName(""), _FullName(""), _ID(""), _Host("gotham"),
       _remotaddr(), _addrlen(), _modes(), _joinedChannels() {}
 
 Client::Client(const Client& x)

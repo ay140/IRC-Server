@@ -24,3 +24,5 @@ MODE -> 2 args -> MODE username mode ex: a i w r o 0 s
 
 SENDFILE ay /Users/ayman_marzouk/Desktop/test.txt /tmp/test.txt
 GETFILE test.txt /Users/ayman_marzouk/Downloads
+
+TODO: try to delete the channels once its empty.

@@ -6,7 +6,7 @@
 /*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:11:07 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 22:56:10 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 23:10:19 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,18 @@ std::string Server::_sendFile(Request request, int i)
 
     if (request.args.size() < 2) 
     {
-        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters");
+        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters, usage: SENDFILE <nick> <file path>");
     }
 
     int targetFd = _findFdByNickName(request.args[0]);
     if (targetFd == USERNOTFOUND) 
     {
         return _printMessage("401", this->_clients[i]->getNickName(), request.args[0] + " :No such nick/channel");
+    }
+
+    if (this->_clients[i]->getNickName() == request.args[0]) 
+    {
+        return _printMessage("997", this->_clients[i]->getNickName(), ":You cannot send a file to yourself");
     }
 
     std::fstream ifs(request.args[1].c_str(), std::fstream::in);
@@ -59,19 +64,15 @@ std::string Server::_sendFile(Request request, int i)
     std::string filename = (pos == std::string::npos) ? request.args[1] : request.args[1].substr(pos + 1);
     File file(filename, request.args[1], this->_clients[i]->getNickName(), request.args[0]);
 
-    if (this->_files.find(filename) != this->_files.end()) 
+    std::map<std::string, File>::iterator fileIt = this->_files.find(filename);
+    if (fileIt != this->_files.end()) 
     {
-        return _printMessage("996", this->_clients[i]->getNickName(), ":File by this name already exists");
+        this->_files.erase(fileIt);
     }
-
     this->_files.insert(std::make_pair(filename, file));
     _privToUser(request.args[0], this->_clients[i]->getNickName() + " wants to send you a file called " + filename + ".", "NOTICE", i);
-    
-    // Confirmation message to the sender
     return _printMessage("200", this->_clients[i]->getNickName(), ":Notice sent to " + request.args[0] + " about the file " + filename);
 }
-
-
 
 std::string Server::_getFile(Request request, int i) 
 {
@@ -82,7 +83,7 @@ std::string Server::_getFile(Request request, int i)
 
     if (request.args.size() < 2) 
     {
-        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters");
+        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters, usage: GETFILE <file name> <file path>");
     }
 
     std::map<std::string, File>::iterator fileIt = this->_files.find(request.args[0]);
@@ -110,6 +111,5 @@ std::string Server::_getFile(Request request, int i)
     ofs.close();
     this->_files.erase(file.Name);
     
-    // Confirmation message to the receiver
     return _printMessage("200", this->_clients[i]->getNickName(), ":File " + request.args[0] + " received successfully");
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:29:36 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 17:10:57 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 23:16:34 by ayman_marzo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,8 @@ Server::Server(const std::string& name, int max_online, const std::string& port,
         _online_c = 0;
         _socketfd = -1;
         _pfds = new struct pollfd[max_online + 1];
-
-                // Initialize all pollfd structs in the array
-        for (int i = 0; i < max_online + 1; ++i) {
+        for (int i = 0; i < max_online + 1; ++i) 
+        {
             _pfds[i].fd = -1;
             _pfds[i].events = 0;
             _pfds[i].revents = 0;
@@ -110,7 +109,7 @@ Server & Server::operator=(const Server & rhs)
 }
 Server::~Server() 
 {
-    delete[] this->_pfds; // Always non-null after initialization
+    delete[] this->_pfds;
 
     // Delete all clients
     for (std::map<int, Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
@@ -196,7 +195,7 @@ void Server::_newClient(void)
     catch (const std::exception& e) 
     {
         close(newfd);
-        throw; // Rethrow the exception to be caught in startServer
+        throw;
     }
     
     std::string welcome = _welcomemsg();
