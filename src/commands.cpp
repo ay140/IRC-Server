@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 15:10:40 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 08:47:28 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 std::string Server::_parsing(const std::string& message, int i) 
 {
+    std::cout << "Received command: " << message << std::endl;
     Request request(_splitRequest(message));
+    std::cout << "Command: " << request.command << std::endl;
 
     if (request.invalidMessage)
         return "Invalid message!\n";
@@ -50,8 +52,61 @@ std::string Server::_parsing(const std::string& message, int i)
         return _getFile(request, i);
     else if (request.command == "BOT")
         return _MyBot(request, i);
+    else if (request.command == "CAP")
+        return _handleCAP(request, i);
+    else if (request.command == "WHOIS")
+        return _handleWHOIS(request, i);
+    else if (request.command == "PING")
+        return _handlePING(request, i);
     else
         return "Invalid command\n";
+}
+
+std::string Server::_handleWHOIS(Request request, int i) 
+{
+    if (!this->_clients[i]->getRegistered()) 
+    {
+        // 451: ERR_NOTREGISTERED - Client must register before performing this action
+        return _printMessage("451", this->_clients[i]->getNickName(), ":You have not registered");
+    }
+    if (request.args.size() < 1) 
+    {
+        return _printMessage("431", this->_clients[i]->getNickName(), ":No nickname given");
+    }
+    const std::string& target = request.args[0];
+    for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) 
+    {
+        if (it->second->getNickName() == target) 
+        {
+            Client* client = it->second;
+            return _printMessage("311", this->_clients[i]->getNickName(), target + " " + client->getUserName() + " " + client->getHost() + " * :" + client->getFullName());
+        }
+    }
+    return _printMessage("401", this->_clients[i]->getNickName(), target + " :No such nick/channel");
+}
+
+std::string Server::_handlePING(Request request, int i) 
+{
+    (void)i;
+    if (request.args.size() < 1) 
+    {
+        return "PONG :\n";
+    } else 
+    {
+        return "PONG " + request.args[0] + "\n";
+    }
+}
+
+std::string Server::_handleCAP(Request request, int i) 
+{
+    (void)i;
+    if (request.args.size() == 0) {
+        return "CAP * LS :\n"; // Empty response for CAP without arguments
+    }
+    if (request.args.size() > 1 && request.args[0] == "LS" && request.args[1] == "302") {
+        return "CAP * LS :multi-prefix sasl account-notify extended-join\n";
+    }
+    return "";
 }
 
 std::string Server::_notice(Request request, int i) 

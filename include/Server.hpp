@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 15:45:17 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 08:47:15 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,10 @@ class Server
 		std::string						_printUserModes(std::string ret, int i);
 		bool							_validMode(Request request);
 		std::string						_quit(Request request, int i);
-		void checkDisconnectedClients(int fd_to_remove) ;
+		std::string _handleWHOIS(Request request, int i);
+		std::string _handlePING(Request request, int i);
+		std::string _handleCAP(Request request, int i);
+
 };
 
 template <typename T>

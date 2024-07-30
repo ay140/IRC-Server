@@ -3,36 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 07:29:06 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 08:47:11 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
-
-void Server::checkDisconnectedClients(int fd_to_remove) 
-{
-    std::map<int, Client*>::iterator it = this->_clients.find(fd_to_remove);
-    if (it != this->_clients.end()) 
-    {
-        std::string nickname = it->second->getNickName();
-        if (!nickname.empty()) 
-        {
-            this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
-        }
-        delete it->second;
-        this->_clients.erase(it);
-        std::cout << "Cleaned up resources for fd: " << fd_to_remove << std::endl;
-    } 
-    else 
-    {
-        std::cout << "FD not found in _clients map during cleanup: " << fd_to_remove << std::endl;
-    }
-}
-
-
 
 void Server::_addToPoll(int newfd) 
 {

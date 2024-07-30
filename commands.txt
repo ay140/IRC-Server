@@ -4,3 +4,18 @@ ps aux | grep ircserv
 
 lsof -p 13343
 
+
+
+/connect localhost 6661
+/quote PASS 
+
+/window next
+/window prev
+
+
+PASS
+NICK -> 1 arg 
+USER -> 4 args
+OPER -> 2 args 
+HELP
+MODE -> 2 args -> MODE username mode ex: a i w r o 0 s

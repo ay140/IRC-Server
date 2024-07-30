@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/29 14:38:47 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 08:19:45 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,15 @@ std::string Server::_parsing(const std::string& message, int i)
         return _setUserName(request, i);
     else if (request.command == "OPER")
         return _setOper(request, i);
-    else if (request.command == "MODE") // reached here
+    else if (request.command == "MODE")
         return _setMode(request, i);
-    else if (request.command == "PRIVMSG")
+    else if (request.command == "PRIVMSG") 
         return _privmsg(request, i);
     else if (request.command == "NOTICE")
         return _notice(request, i);
     else if (request.command == "HELP")
         return _printHelpInfo();
     else if (request.command == "JOIN")
-        return _joinChannel(request, i);
-    else if (request.command == "TOPIC")
         return _topic(request, i);
     else if (request.command == "KICK")
         return _kick(request, i);
@@ -196,7 +194,7 @@ std::string Server::_setMode(Request request, int i)
         return _printMessage("502", this->_clients[i]->getNickName(), ":Cannot change mode for other users");
     }
 
-    if (!_validMode(request)) 
+    if (!_validMode(request)) // check the mode is valid -> should be a, i, w, r, o, O, s
 	{
         // 501: ERR_UMODEUNKNOWNFLAG - Unknown MODE flag
         return _printMessage("501", this->_clients[i]->getNickName(), ":Unknown MODE flag");
