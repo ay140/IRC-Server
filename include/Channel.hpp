@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 15:51:36 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 14:21:48 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ class Channel
 		void	removeVoice(int i);
 		void	removeMember(int i);
 		void	removeBanned(const std::string& nickName);
+
+		bool isEmpty() const;
+        bool isOperator(Client* member) const;
 };
 
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   KickCommand.cpp                                    :+:      :+:    :+:   */
+/*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:48 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/25 21:53:16 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 14:01:02 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ std::string Server::_kickedFromChannel(const std::string& channelName, const std
 		{
             for (std::vector<std::string>::const_iterator userIt = users.begin(); userIt != users.end(); ++userIt) 
 			{
+                if (*userIt == this->_clients[i]->getNickName()) 
+                {
+                    return _printMessage("482", this->_clients[i]->getNickName(), channelName + " :You cannot kick yourself from the channel");
+                }
                 int userFd = _findFdByNickName(*userIt);
                 if (userFd == USERNOTINCHANNEL) 
 				{
@@ -39,7 +43,9 @@ std::string Server::_kickedFromChannel(const std::string& channelName, const std
                 _sendToAllUsers(it->second, i, reply);
                 it->second->banUser(this->_clients[userFd]);
                 _partChannel(channelName, userFd, "", 0);
-            }
+            _sendall(i, "You have kicked " + *userIt + " from " + channelName + "\n");
+
+        }
         } 
 		else if (user.second == -1) 
 		{

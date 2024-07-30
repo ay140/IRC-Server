@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 11:27:46 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 14:32:54 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,4 +194,15 @@ std::string Channel::listAllUsers() const
         allUsers.append("+").append(it->second->getNickName()).append(" ");
     }
     return allUsers;
+}
+
+
+bool Channel::isEmpty() const 
+{
+    return this->_members.empty();
+}
+
+bool Channel::isOperator(Client* member) const 
+{
+    return this->_operators.find(member->getClientfd()) != this->_operators.end();
 }

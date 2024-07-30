@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 09:35:12 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/30 14:31:18 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,25 @@ void Server::_removeFromPoll(int index)
         if (!nickname.empty()) 
         {
             this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
+        }
+        // Remove the client from all channels they are part of
+        std::map<std::string, Channel *> channels = it->second->getJoinedChannels();
+        std::map<std::string, Channel *>::iterator itChannel = channels.begin();
+        while (itChannel != channels.end()) 
+        {
+            std::string channelName = itChannel->first;
+            Channel *channel = itChannel->second;
+            channel->removeMember(fd_to_remove);
+            std::cout << "Removed " << nickname << " from channel " << channelName << std::endl;
+            // Check if the channel is empty
+            if (channel->isEmpty()) 
+            {
+                std::cout << "Channel " << channelName << " is empty. Deleting it." << std::endl;
+                delete channel;
+                this->_allChannels.erase(channelName);
+            }
+
+            ++itChannel;
         }
         delete it->second;
         this->_clients.erase(it);
