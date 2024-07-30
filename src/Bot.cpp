@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MyBot.cpp                                          :+:      :+:    :+:   */
+/*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:35 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/26 00:48:01 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 11:35:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,15 @@ std::string Server::_listAllChannels() const
 
     std::map<std::string, Channel*>::const_iterator it = this->_allChannels.begin();
     while (it != this->_allChannels.end()) 
-	{
-        channels << "│ " << fillIt(it->first, 12) << " │ "
-                 << fillIt(to_string(it->second->getOnlineUsers()), 12) << " │ "
-                 << fillIt(it->second->getCreator()->getFullName(), 18) << " │ "
-                 << fillIt(it->second->getTopic(), 32) << " │\n";
+    {
+        Channel* channel = it->second;
+        if (channel) 
+        {
+            channels << "│ " << fillIt(it->first, 12) << " │ "
+                     << fillIt(to_string(channel->getOnlineUsers()), 12) << " │ "
+                     << fillIt(channel->getCreator() ? channel->getCreator()->getFullName() : "Unknown", 18) << " │ "
+                     << fillIt(channel->getTopic(), 32) << " │\n";
+        }
         it++;
     }
 

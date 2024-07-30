@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 14:32:54 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:32:29 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,19 +182,29 @@ std::string Channel::listAllUsers() const
     std::map<int, Client*>::const_iterator it;
 
     for (it = this->_operators.begin(); it != this->_operators.end(); ++it) 
-	{
-        allUsers.append("@").append(it->second->getNickName()).append(" ");
+    {
+        if (it->second) 
+        {
+            allUsers.append("@").append(it->second->getNickName()).append(" ");
+        }
     }
     for (it = this->_members.begin(); it != this->_members.end(); ++it) 
-	{
-        allUsers.append(it->second->getNickName()).append(" ");
+    {
+        if (it->second) 
+        {
+            allUsers.append(it->second->getNickName()).append(" ");
+        }
     }
     for (it = this->_voice.begin(); it != this->_voice.end(); ++it) 
-	{
-        allUsers.append("+").append(it->second->getNickName()).append(" ");
+    {
+        if (it->second) 
+        {
+            allUsers.append("+").append(it->second->getNickName()).append(" ");
+        }
     }
     return allUsers;
 }
+
 
 
 bool Channel::isEmpty() const 
