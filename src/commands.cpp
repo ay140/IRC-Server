@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 08:47:28 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:33:42 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 std::string Server::_parsing(const std::string& message, int i) 
 {
-    std::cout << "Received command: " << message << std::endl;
     Request request(_splitRequest(message));
-    std::cout << "Command: " << request.command << std::endl;
 
     if (request.invalidMessage)
         return "Invalid message!\n";
