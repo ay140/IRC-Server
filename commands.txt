@@ -1,3 +1,5 @@
+for i in {1..100}; do ./test.sh & done
+
 valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6661 1
 
 ps aux | grep ircserv
