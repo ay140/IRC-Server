@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:48:31 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/27 21:34:38 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/30 13:26:52 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int main(int ac, char **av)
 
     try
     {
-        server_instance = new Server("Gotham", 100, av[1], av[2]);
+        server_instance = new Server("Gotham", 256, av[1], av[2]);
         server_instance->startServer();
     }
     catch (const std::exception& e)
