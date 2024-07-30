@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 10:33:42 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:15:31 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,17 @@ std::string Server::_notice(Request request, int i)
         return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters");
     }
 
-    _privToUser(request.args[0], request.args[1], "NOTICE", i);
+    const std::string& target = request.args[0];
+    const std::string& message = request.args[1];
+
+    // Check if the target user exists
+    int userFd = _findFdByNickName(target);
+    if (userFd == USERNOTFOUND) 
+	{
+        return _printMessage("401", this->_clients[i]->getNickName(), target + " :No such nick");
+    }
+
+    _privToUser(target, message, "NOTICE", i);
     return "";
 }
 

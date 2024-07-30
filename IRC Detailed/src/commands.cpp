@@ -6,7 +6,7 @@
 /*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 08:19:45 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:56:23 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ std::string Server::_notice(Request request, int i)
     return "";
 }
 
-int Server::_findFdByNickName(const std::string& nickName) const 
+int Server::_findFdByNickName(const std::string& nickName) const // find the fd of a client by his nickname
 {
     for (std::map<int, Client*>::const_iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) 
 	{
