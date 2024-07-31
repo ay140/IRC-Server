@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 07:51:50 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 08:13:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,10 +222,6 @@ bool Channel::isOperator(Client* member) const
     return this->_operators.find(member->getClientfd()) != this->_operators.end();
 }
 
-
-
-
-    // Check if a client is a member of the channel
 bool Channel::isMember(int clientFd) const 
 {
         return _members.find(clientFd) != _members.end() || _operators.find(clientFd) != _operators.end() || _voice.find(clientFd) != _voice.end();

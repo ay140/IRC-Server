@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:27 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 23:14:49 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/31 08:14:07 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ std::string Server::_joinChannel(Request request, int fd)
 
     while (itChannels != parsChannels.end() && result == 1) 
 	{
-        // Check if the user is already joined to the channel
         if (this->_clients[fd]->isJoined(*itChannels)) 
         {
             return _printMessage("443", this->_clients[fd]->getNickName(), *itChannels + " :You're already on that channel");

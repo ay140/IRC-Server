@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 05:00:55 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/31 05:39:44 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 08:13:58 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,11 @@ std::string Server::_invitedToChannel(const std::string& channelName, const std:
         // 443: ERR_USERONCHANNEL - User is already on that channel
         return _printMessage("443", this->_clients[fd]->getNickName(), targetNick + " " + channelName + " :is already on channel");
     }
-    // Add the user to the channel
     int result = channel->addMember(this->_clients[targetFd]);
     if (result == BANNEDFROMCHAN)
     {
         return _printMessage("474", this->_clients[fd]->getNickName(), targetNick + " :Cannot join channel (+b)");
     }
-    // Notify the invited client that they have been added to the channel
     _sendall(targetFd, _printMessage("341", this->_clients[targetFd]->getNickName(), channelName + " :You have been invited to the channel"));
     _sendall(targetFd, _printMessage("332", this->_clients[targetFd]->getNickName(), channelName + " :" + channel->getTopic()));
     _sendall(targetFd, _printMessage("353", this->_clients[targetFd]->getNickName() + " = " + channelName, channel->listAllUsers()));

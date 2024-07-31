@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 17:21:53 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 08:15:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void Server::_removeFromPoll(int index)
     {
         std::cout << "Error: FD not found in _clients map: " << fd_to_remove << std::endl;
     }
-    // Move the last element to the position of the element to remove
     if (index != this->_online_c - 1) 
     {
         this->_pfds[index] = this->_pfds[this->_online_c - 1];

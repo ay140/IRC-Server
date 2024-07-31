@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 06:28:48 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 08:13:24 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ std::string Server::_parsing(const std::string& message, int i)
     else
         return "Invalid command\n";
 }
-
 
 std::string Server::_handleWHOIS(Request request, int i) 
 {
