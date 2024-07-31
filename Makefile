@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/25 10:49:31 by amarzouk          #+#    #+#              #
-#    Updated: 2024/07/27 20:20:07 by ayman_marzo      ###   ########.fr        #
+#    Updated: 2024/07/31 05:07:02 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ RESET = \033[0m
 
 SRC_FILES = Client.cpp Server.cpp commands.cpp Socket.cpp \
 poll.cpp Part.cpp Join.cpp Kick.cpp \
-Privmsg.cpp Request.cpp File.cpp Channel.cpp Bot.cpp
+Privmsg.cpp Request.cpp File.cpp Channel.cpp Bot.cpp Invite.cpp
 
 HEADERS_FILES = include/Client.hpp include/Server.hpp include/Channel.hpp \
 include/Request.hpp include/File.hpp

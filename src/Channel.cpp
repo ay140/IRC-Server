@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 11:32:29 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 05:22:50 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ Channel::Channel()
 Channel::Channel(const Channel& x)
     : _onlineUsers(x._onlineUsers), _prefix(x._prefix), _creator(x._creator),
       _name(x._name), _key(x._key), _topic(x._topic),
-      _members(x._members), _operators(x._operators), _voice(x._voice), _banned(x._banned) {}
+      _members(x._members), _operators(x._operators), _voice(x._voice),
+      _banned(x._banned) {}
 
 Channel::Channel(const std::string& channelName, Client* creator)
     : _onlineUsers(1), _prefix(), _creator(creator), _name(channelName), _key(), _topic(),
@@ -50,7 +51,6 @@ Channel& Channel::operator=(const Channel& rhs) {
 }
 
 Channel::~Channel() {}
-
 
 char							const &Channel::getPrefix()			const { return this->_prefix; };
 int								const &Channel::getOnlineUsers()	const { return this->_onlineUsers; };
@@ -216,3 +216,12 @@ bool Channel::isOperator(Client* member) const
 {
     return this->_operators.find(member->getClientfd()) != this->_operators.end();
 }
+
+
+
+
+    // Check if a client is a member of the channel
+bool Channel::isMember(int clientFd) const 
+{
+        return _members.find(clientFd) != _members.end() || _operators.find(clientFd) != _operators.end() || _voice.find(clientFd) != _voice.end();
+    }

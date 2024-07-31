@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayman_marzouk <ayman_marzouk@student.42    +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 23:13:52 by ayman_marzo      ###   ########.fr       */
+/*   Updated: 2024/07/31 05:00:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ std::string Server::_parsing(const std::string& message, int i)
         return _notice(request, i);
     else if (request.command == "HELP")
         return _printHelpInfo();
+    else if (request.command == "INVITE")
+        return _invite(request, i);
     else if (request.command == "JOIN")
         return _joinChannel(request, i);
     else if (request.command == "TOPIC")
@@ -59,6 +61,7 @@ std::string Server::_parsing(const std::string& message, int i)
     else
         return "Invalid command\n";
 }
+
 
 std::string Server::_handleWHOIS(Request request, int i) 
 {

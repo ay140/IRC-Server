@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:48 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 14:01:02 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/31 05:42:26 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ std::string Server::_kick(Request request, int fd)
     if (request.args.size() < 2) 
 	{
         // 461: ERR_NEEDMOREPARAMS - Not enough parameters provided for the command
-        return _printMessage("461", this->_clients[fd]->getNickName(), ":Not enough parameters");
+        return _printMessage("461", this->_clients[fd]->getNickName(), ":Not enough parameters, useage: /kick <channel> <user> [reason]");
     }
 
     std::vector<std::string> channels = _commaSeparator(request.args[0]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 14:21:48 by amarzouk         ###   ########.fr       */
+/*   Updated: 2024/07/31 05:22:08 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ class Channel
 		std::map<int, Client *>			_operators;
 		std::map<int, Client *>			_voice;
 		std::vector<std::string>		_banned;
-
 	public:
 		Channel(const std::string& channelName, Client* creator);
 		Channel(const std::string& channelName, const std::string& channelKey, Client* creator);
@@ -82,6 +81,7 @@ class Channel
 
 		bool isEmpty() const;
         bool isOperator(Client* member) const;
+		bool isMember(int clientFd) const;
 };
 
 #endif
