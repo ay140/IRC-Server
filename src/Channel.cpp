@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 05:22:50 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 06:44:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 Channel::Channel()
     : _onlineUsers(0), _prefix(), _creator(NULL), _name(), _key(), _topic(),
-      _members(), _operators(), _voice(), _banned() {}
+      _members(), _operators(), _voice(), _banned(), _inviteOnly(false), _topicRestricted(false) {}
 
 Channel::Channel(const Channel& x)
     : _onlineUsers(x._onlineUsers), _prefix(x._prefix), _creator(x._creator),
       _name(x._name), _key(x._key), _topic(x._topic),
-      _members(x._members), _operators(x._operators), _voice(x._voice),
-      _banned(x._banned) {}
+      _members(x._members), _operators(x._operators), _voice(x._voice), _banned(x._banned),
+      _inviteOnly(x._inviteOnly), _topicRestricted(x._topicRestricted) {}
 
 Channel::Channel(const std::string& channelName, Client* creator)
     : _onlineUsers(1), _prefix(), _creator(creator), _name(channelName), _key(), _topic(),
-      _members(), _operators(), _voice(), _banned() {
+      _members(), _operators(), _voice(), _banned(), _inviteOnly(false), _topicRestricted(false) {
     this->_operators.insert(std::make_pair(creator->getClientfd(), creator));
 }
 
 Channel::Channel(const std::string& channelName, const std::string& channelKey, Client* creator)
     : _onlineUsers(1), _prefix(), _creator(creator), _name(channelName), _key(channelKey), _topic(),
-      _members(), _operators(), _voice(), _banned() {
+      _members(), _operators(), _voice(), _banned(), _inviteOnly(false), _topicRestricted(false) {
     this->_operators.insert(std::make_pair(creator->getClientfd(), creator));
 }
 
@@ -46,6 +46,8 @@ Channel& Channel::operator=(const Channel& rhs) {
         this->_operators = rhs._operators;
         this->_voice = rhs._voice;
         this->_banned = rhs._banned;
+        this->_inviteOnly = rhs._inviteOnly;
+        this->_topicRestricted = rhs._topicRestricted;
     }
     return *this;
 }
@@ -224,4 +226,24 @@ bool Channel::isOperator(Client* member) const
 bool Channel::isMember(int clientFd) const 
 {
         return _members.find(clientFd) != _members.end() || _operators.find(clientFd) != _operators.end() || _voice.find(clientFd) != _voice.end();
+    }
+
+    void Channel::setInviteOnly(bool mode) 
+    {
+        _inviteOnly = mode;
+    }
+
+    void Channel::setTopicRestricted(bool mode) 
+    {
+        _topicRestricted = mode;
+    }
+
+    bool Channel::getInviteOnly() const 
+    {
+        return _inviteOnly;
+    }
+
+    bool Channel::getTopicRestricted() const 
+    {
+        return _topicRestricted;
     }

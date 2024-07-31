@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 04:53:53 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 06:32:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,8 @@ class Server
 
 		std::string _invite(Request request, int i);
 		std::string _invitedToChannel(const std::string& channelName, const std::string& targetNick, int fd);
+		std::string _setChannelMode(Request request, int i);
+
 
 };
 

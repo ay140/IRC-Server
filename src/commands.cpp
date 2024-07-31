@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 05:00:52 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 06:28:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,42 +237,6 @@ std::string	Server::_printUserModes(std::string ret, int i)
 	return ret;
 }
 
-std::string Server::_setMode(Request request, int i) 
-{
-    if (!this->_clients[i]->getRegistered()) 
-	{
-        // 451: ERR_NOTREGISTERED - Client must register before performing this action
-        return _printMessage("451", this->_clients[i]->getNickName(), ":You have not registered");
-    }
-
-    if (request.args.size() < 2) 
-	{
-        std::string ret;
-        if (request.args.size() == 1 && request.args[0] == this->_clients[i]->getNickName()) 
-		{
-            ret = _printUserModes(ret, i);
-        }
-        ret.append("461 ERR_NEEDMOREPARAMS :Not enough parameters useage: MODE <nickname> <mode>\n");
-        return ret;
-    }
-
-    if (request.args[0] != this->_clients[i]->getNickName()) 
-	{
-        // 502: ERR_USERSDONTMATCH - Cannot change mode for other users
-        return _printMessage("502", this->_clients[i]->getNickName(), ":Cannot change mode for other users");
-    }
-
-    if (!_validMode(request)) 
-	{
-        // 501: ERR_UMODEUNKNOWNFLAG - Unknown MODE flag
-        return _printMessage("501", this->_clients[i]->getNickName(), ":Unknown MODE flag");
-    }
-    bool addMode = (request.args[1][0] == '+');
-    this->_clients[i]->setMode(addMode, request.args[1][1]);
-
-    // 221: RPL_UMODEIS - Mode change
-    return _printMessage("221", this->_clients[i]->getNickName(), request.args[1]);
-}
 
 std::string Server::_setOper(Request request, int i) 
 {
