@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 06:38:52 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 07:48:29 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class Channel
 		std::vector<std::string>		_banned;
 	    bool _inviteOnly;
     	bool _topicRestricted;
+		int _userLimit;
 	public:
 		Channel(const std::string& channelName, Client* creator);
 		Channel(const std::string& channelName, const std::string& channelKey, Client* creator);
@@ -89,6 +90,11 @@ class Channel
 		void setTopicRestricted(bool mode);
 		bool getInviteOnly() const;
 		bool getTopicRestricted() const;
+
+		void setUserLimit(int limit);
+		void removeUserLimit();
+		 int getUserLimit() const;
+		
 };
 
 #endif

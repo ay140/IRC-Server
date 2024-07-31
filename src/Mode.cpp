@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 06:28:51 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/31 07:33:57 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 08:02:50 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,67 +60,46 @@ std::string Server::_setMode(Request request, int i)
     }
 }
 
-
 std::string Server::_setChannelMode(Request request, int i) 
 {
-    std::map<std::string, Channel *>::iterator it = this->_allChannels.find(request.args[0]);
+    if (request.args.size() < 2) 
+	{
+        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters");
+    }
+
+    std::string channelName = request.args[0];
+    std::string mode = request.args[1];
+
+    std::map<std::string, Channel*>::iterator it = this->_allChannels.find(channelName);
     if (it == this->_allChannels.end()) 
 	{
-        // 403: ERR_NOSUCHCHANNEL - No such channel exists
-        return _printMessage("403", this->_clients[i]->getNickName(), request.args[0] + " :No such channel");
+        return _printMessage("403", this->_clients[i]->getNickName(), channelName + " :No such channel");
     }
 
     Channel* channel = it->second;
-    std::pair<Client *, int> user = channel->findUserRole(i);
+    std::pair<Client*, int> user = channel->findUserRole(i);
     if (user.second != 1) 
 	{
-        if (user.second == -1) 
-		{
-            // 442: ERR_NOTONCHANNEL - User is not on the specified channel
-            return _printMessage("442", this->_clients[i]->getNickName(), request.args[0] + " :You're not on that channel");
-        } 
-		else 
-		{
-            // 482: ERR_CHANOPRIVSNEEDED - You're not a channel operator
-            return _printMessage("482", this->_clients[i]->getNickName(), request.args[0] + " :You're not channel operator");
-        }
+        return _printMessage("482", this->_clients[i]->getNickName(), channelName + " :You're not a channel operator");
     }
 
-    if (request.args.size() < 3 && (request.args[1][1] == 'k' || request.args[1][1] == 'o')) 
+    bool addMode = (mode[0] == '+');
+    std::string reply = ":" + this->_clients[i]->getUserPrefix() + " MODE " + channelName + " " + mode;
+    switch (mode[1]) 
 	{
-        return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters for channel mode change");
-    }
-
-    bool addMode = (request.args[1][0] == '+');
-    char mode = request.args[1][1];
-
-    int targetFd = -1; // Initialize targetFd here
-
-    switch (mode) 
-	{
-        case 'i': // Invite-only mode
-            channel->setInviteOnly(addMode);
-            break;
-        case 't': // Topic restrictions mode
-            channel->setTopicRestricted(addMode);
-            break;
-        case 'k': // Channel key (password)
-            if (addMode) 
+        case 'o':
+        {
+            if (request.args.size() < 3) 
 			{
-                channel->setKey(request.args[2]);
-            } 
-			else 
-			{
-                channel->setKey("");
+                return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters");
             }
-            break;
-        case 'o': // Operator privileges
-            targetFd = _findFdByNickName(request.args[2]);
+            std::string targetNick = request.args[2];
+            int targetFd = _findFdByNickName(targetNick);
             if (targetFd == USERNOTINCHANNEL) 
 			{
-                // 401: ERR_NOSUCHNICK - No such nick/channel
-                return _printMessage("401", this->_clients[i]->getNickName(), request.args[2] + " :No such nick");
+                return _printMessage("401", this->_clients[i]->getNickName(), targetNick + " :No such nick");
             }
+
             if (addMode) 
 			{
                 channel->addOperator(this->_clients[targetFd]);
@@ -129,24 +108,66 @@ std::string Server::_setChannelMode(Request request, int i)
 			{
                 channel->removeOperator(targetFd);
             }
+            reply += " " + targetNick;
             break;
+        }
+        case 'i':
+        {
+            channel->setInviteOnly(addMode);
+            break;
+        }
+        case 't':
+        {
+            channel->setTopicRestricted(addMode);
+            break;
+        }
+        case 'k':
+        {
+            if (addMode) 
+			{
+                if (request.args.size() < 3) 
+				{
+                    return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters for key");
+                }
+                channel->setKey(request.args[2]);
+                reply += " " + request.args[2];
+            } 
+			else 
+			{
+                channel->setKey("");
+            }
+            break;
+        }
+        case 'l':
+        {
+            if (addMode) 
+			{
+                if (request.args.size() < 3) 
+				{
+                    return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters for limit");
+                }
+                std::istringstream iss(request.args[2]);
+                int limit;
+                iss >> limit;
+                if (iss.fail()) 
+				{
+                    return _printMessage("461", this->_clients[i]->getNickName(), ":Invalid limit parameter");
+                }
+                channel->setUserLimit(limit);
+                reply += " " + request.args[2];
+            } 
+			else 
+			{
+                channel->removeUserLimit();
+            }
+            break;
+        }
         default:
-            // 501: ERR_UMODEUNKNOWNFLAG - Unknown MODE flag
             return _printMessage("501", this->_clients[i]->getNickName(), ":Unknown MODE flag");
     }
 
-    // Notify the channel about the mode change
-    std::string reply = ":" + this->_clients[i]->getUserPrefix() + " MODE " + request.args[0] + " " + request.args[1];
-    if (request.args.size() == 3) 
-	{
-        reply += " " + request.args[2];
-    }
     reply += "\n";
     _sendToAllUsers(channel, i, reply);
 
-    // Confirmation message for the user
-    std::string confirmation = "MODE change for channel " + request.args[0] + " has been successful\n";
-    _sendall(i, confirmation);
-
-    return "";
+    return _printMessage("324", this->_clients[i]->getNickName(), channelName + " " + mode);
 }
