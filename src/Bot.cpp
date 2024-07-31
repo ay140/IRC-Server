@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:35 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/30 11:35:03 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 10:06:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ std::string Server::_MyBot(Request req, int i)
         }
 		else 
 		{
-            return "Usage of this Command: MYBOT 4 [CHANNEL NAME]\n";
+            return "Usage of this Command: BOT 4 [CHANNEL NAME]\n";
         }
     } 
 	else if (req.args[0] == "5") 
@@ -96,7 +96,7 @@ std::string Server::_channelInfo(const std::string& channelName, int i) const
 		{
             std::ostringstream info;
             info << "Channel Name: " << it->second->getName() << "\n";
-            info << "Channel Creator: " << it->second->getCreator()->getFullName() << "\n";
+            info << "Channel Creator: " << it->second->getCreator()->getNickName() << "\n";
             info << "Online Users: " << it->second->getOnlineUsers() << "\n";
             info << "Channel Topic: " << it->second->getTopic() << "\n";
             return info.str();
@@ -126,7 +126,7 @@ std::string Server::_listAllChannels() const
         {
             channels << "│ " << fillIt(it->first, 12) << " │ "
                      << fillIt(to_string(channel->getOnlineUsers()), 12) << " │ "
-                     << fillIt(channel->getCreator() ? channel->getCreator()->getFullName() : "Unknown", 18) << " │ "
+                     << fillIt(channel->getCreator() ? channel->getCreator()->getNickName() : "Unknown", 18) << " │ "
                      << fillIt(channel->getTopic(), 32) << " │\n";
         }
         it++;

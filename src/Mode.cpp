@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 06:28:51 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/31 08:02:50 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/31 10:00:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ std::string Server::_setChannelMode(Request request, int i)
 
     bool addMode = (mode[0] == '+');
     std::string reply = ":" + this->_clients[i]->getUserPrefix() + " MODE " + channelName + " " + mode;
+    std::string confirmationMessage;
+
     switch (mode[1]) 
 	{
         case 'o':
@@ -103,10 +105,12 @@ std::string Server::_setChannelMode(Request request, int i)
             if (addMode) 
 			{
                 channel->addOperator(this->_clients[targetFd]);
+                confirmationMessage = "You have made " + targetNick + " an operator in " + channelName;
             } 
 			else 
 			{
                 channel->removeOperator(targetFd);
+                confirmationMessage = "You have removed operator privileges from " + targetNick + " in " + channelName;
             }
             reply += " " + targetNick;
             break;
@@ -114,11 +118,13 @@ std::string Server::_setChannelMode(Request request, int i)
         case 'i':
         {
             channel->setInviteOnly(addMode);
+            confirmationMessage = addMode ? "Invite-only mode is enabled for " + channelName : "Invite-only mode is disabled for " + channelName;
             break;
         }
         case 't':
         {
             channel->setTopicRestricted(addMode);
+            confirmationMessage = addMode ? "Topic change restriction is enabled for " + channelName : "Topic change restriction is disabled for " + channelName;
             break;
         }
         case 'k':
@@ -131,10 +137,12 @@ std::string Server::_setChannelMode(Request request, int i)
                 }
                 channel->setKey(request.args[2]);
                 reply += " " + request.args[2];
+                confirmationMessage = "Key (password) is set for " + channelName;
             } 
 			else 
 			{
                 channel->setKey("");
+                confirmationMessage = "Key (password) is removed for " + channelName;
             }
             break;
         }
@@ -155,10 +163,12 @@ std::string Server::_setChannelMode(Request request, int i)
                 }
                 channel->setUserLimit(limit);
                 reply += " " + request.args[2];
+                confirmationMessage = "User limit is set to " + request.args[2] + " for " + channelName;
             } 
 			else 
 			{
                 channel->removeUserLimit();
+                confirmationMessage = "User limit is removed for " + channelName;
             }
             break;
         }
@@ -169,5 +179,5 @@ std::string Server::_setChannelMode(Request request, int i)
     reply += "\n";
     _sendToAllUsers(channel, i, reply);
 
-    return _printMessage("324", this->_clients[i]->getNickName(), channelName + " " + mode);
+    return _printMessage("324", this->_clients[i]->getNickName(), confirmationMessage);
 }
