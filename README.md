@@ -121,7 +121,7 @@ The IRC server supports the following commands:
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/ay140/ircserver.git
+   git clone [https://github.com/ay140/ircserver.git](https://github.com/ay140/ft_IRC.git)
     ```
 
 ## Contact
