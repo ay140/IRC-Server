@@ -121,8 +121,18 @@ The IRC server supports the following commands:
 
 1. **Clone the repository:**
    ```sh
-   git clone [https://github.com/ay140/ircserver.git](https://github.com/ay140/ft_IRC.git)
+    git clone https://github.com/ay140/ft_IRC.git
     ```
+
+2. **Compile the server:**
+   ```sh
+    make
+    ```
+3. **Run the server:**
+   ```sh
+    ./ircserv <port> <password>
+    ```
+4. **Connect to the server using an IRC client.**
 
 ## Contact
 For any inquiries or issues, please contact amarzouk@student.42abudhabi.ae.
