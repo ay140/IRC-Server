@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 07:53:03 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 08:01:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,9 @@ class Channel
 		bool isMember(int clientFd) const;
 
 		void setInviteOnly(bool mode);
-		void setTopicRestricted(bool mode);
 		bool getInviteOnly() const;
+
+		void setTopicRestricted(bool mode);
 		bool getTopicRestricted() const;
 
 		void setUserLimit(int limit);

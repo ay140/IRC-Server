@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:27 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 07:54:40 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 08:09:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ std::string Server::_joinChannel(Request request, int fd)
         }
         else if (result == CHANNELISFULL)
         {
-            return _printMessage("471", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+l)");
+            return _printMessage("471", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+l) - Channel is full");
         }
         else if (result == NOSUCHCHANNEL)
         {
@@ -120,6 +120,10 @@ int Server::_createChannel(const std::string& channelName, int creatorFd)
         if (it->second->getInviteOnly()) 
 		{
             return CHANNELISINVITEONLY;
+        }
+        if (it->second->getUserLimit() != -1 && it->second->getOnlineUsers() >= it->second->getUserLimit()) 
+        {
+            return CHANNELISFULL;
         }
         if (it->second->getKey().empty()) 
 		{
@@ -171,6 +175,10 @@ int Server::_createPrvChannel(const std::string& channelName, const std::string&
     } 
 	else 
 	{
+        if (it->second->getUserLimit() != -1 && it->second->getOnlineUsers() >= it->second->getUserLimit()) 
+        {
+            return CHANNELISFULL;
+        }
         if (it->second->getInviteOnly()) 
 		{
             return CHANNELISINVITEONLY;
