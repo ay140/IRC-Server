@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 08:04:58 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 08:16:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,14 +233,14 @@ bool Channel::isMember(int clientFd) const
         _inviteOnly = mode;
     }
 
-    void Channel::setTopicRestricted(bool mode) 
-    {
-        _topicRestricted = mode;
-    }
-
     bool Channel::getInviteOnly() const 
     {
         return _inviteOnly;
+    }
+
+    void Channel::setTopicRestricted(bool mode) 
+    {
+        _topicRestricted = mode;
     }
 
     bool Channel::getTopicRestricted() const 

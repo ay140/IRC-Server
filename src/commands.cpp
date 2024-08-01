@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 08:13:24 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 08:26:31 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,22 +185,25 @@ std::string Server::_topic(Request request, int i)
     }
 
     std::pair<Client*, int> user = channel->findUserRole(i);
-    if (user.second == 1) 
-	{ // User is an operator
-        channel->setTopic(request.args[1]);
-        std::string reply = "TOPIC " + channel->getName() + " :" + request.args[1] + "\n";
-        _sendToAllUsers(channel, i, reply);
-    } 
-	else if (user.second == -1) 
-	{ // User is not in the channel
+    if (user.second == -1) 
+    { 
+        // User is not in the channel
         // 442: ERR_NOTONCHANNEL - User is not on the specified channel
         return _printMessage("442", this->_clients[i]->getNickName(), request.args[0] + " :You're not on that channel");
-    } 
-	else 
-	{ // User is not an operator
+    }
+
+    // Check if the topic is restricted and the user is not an operator
+    if (channel->getTopicRestricted() && user.second != 1) 
+    {
         // 482: ERR_CHANOPRIVSNEEDED - You're not a channel operator
         return _printMessage("482", this->_clients[i]->getNickName(), request.args[0] + " :You're not channel operator");
     }
+
+    // Set the topic
+    channel->setTopic(request.args[1]);
+    std::string reply = "TOPIC " + channel->getName() + " :" + request.args[1] + "\n";
+    _sendToAllUsers(channel, i, reply);
+
 
     return "";
 }
