@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 08:16:14 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 09:04:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,15 +164,15 @@ std::map<int, Client*> Channel::getAllUsers() const
 
 std::pair<Client*, int> Channel::findUserRole(int i) const 
 {
-    std::map<int, Client*>::const_iterator it = this->_members.find(i);
-    if (it != this->_members.end()) 
-	{
-        return std::make_pair(it->second, 0);
-    }
-    it = this->_operators.find(i);
+    std::map<int, Client*>::const_iterator it = this->_operators.find(i);
     if (it != this->_operators.end()) 
 	{
         return std::make_pair(it->second, 1);
+    }
+    it = this->_members.find(i);
+    if (it != this->_members.end()) 
+	{
+        return std::make_pair(it->second, 0);
     }
     it = this->_voice.find(i);
     if (it != this->_voice.end()) 
@@ -181,6 +181,7 @@ std::pair<Client*, int> Channel::findUserRole(int i) const
     }
     return std::make_pair(static_cast<Client*>(NULL), -1);
 }
+
 
 std::string Channel::listAllUsers() const 
 {

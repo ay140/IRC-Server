@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 06:28:51 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/31 10:00:20 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 09:04:17 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ std::string Server::_setChannelMode(Request request, int i)
         {
             if (request.args.size() < 3) 
 			{
-                return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters");
+                return _printMessage("461", this->_clients[i]->getNickName(), ":Not enough parameters, useage: MODE <channel> +o <nickname>");
             }
             std::string targetNick = request.args[2];
             int targetFd = _findFdByNickName(targetNick);
