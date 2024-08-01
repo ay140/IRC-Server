@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:45 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 09:41:00 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 09:59:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 Client::Client()
     : _clientfd(0), _Auth(false), _Registered(false), _isOperator(false),
       _NickName(""), _UserName(""), _FullName(""), _ID(""), _Host("gotham"),
-      _remotaddr(), _addrlen(), _modes(), _joinedChannels() {}
+      _remotaddr(), _addrlen(), _modes(), _joinedChannels(), _quitFlag(false) {}
 
 Client::Client(int fd)
     : _clientfd(fd), _Auth(false), _Registered(false), _isOperator(false),
       _NickName(""), _UserName(""), _FullName(""), _ID(""), _Host("gotham"),
-      _remotaddr(), _addrlen(), _modes(), _joinedChannels() {}
+      _remotaddr(), _addrlen(), _modes(), _joinedChannels(), _quitFlag(false) {}
 
 Client::Client(const Client& x)
     : _clientfd(x._clientfd), _Auth(x._Auth), _Registered(x._Registered),
       _isOperator(x._isOperator), _NickName(x._NickName), _UserName(x._UserName),
       _FullName(x._FullName), _ID(x._ID), _Host(x._Host),
       _remotaddr(x._remotaddr), _addrlen(x._addrlen), _modes(x._modes),
-      _joinedChannels(x._joinedChannels) {}
+      _joinedChannels(x._joinedChannels), _quitFlag(x._quitFlag) {}
 
 Client& Client::operator=(const Client& rhs) 
 {
@@ -45,6 +45,7 @@ Client& Client::operator=(const Client& rhs)
     this->_addrlen = rhs._addrlen;
     this->_modes = rhs._modes;
     this->_joinedChannels = rhs._joinedChannels;
+    this->_quitFlag = rhs._quitFlag;
     return (*this);
 }
 
@@ -218,3 +219,7 @@ std::map<std::string, Channel *> Client::getJoinedChannels() const
 { 
 	return (this->_joinedChannels); 
 };
+
+
+bool Client::getQuitFlag() const { return _quitFlag; }
+void Client::setQuitFlag(bool flag) { _quitFlag = flag; }

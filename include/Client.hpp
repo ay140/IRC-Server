@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 09:41:12 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 09:59:27 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ class Client
 		socklen_t							_addrlen;
 		struct Modes						_modes;
 		std::map<std::string, Channel *>	_joinedChannels;
+		 bool _quitFlag;
 
 	public:
 		Client(int fd);
@@ -98,6 +99,8 @@ class Client
 
 		int				isJoined(const std::string& channelName) const;
 		std::string		JoinedChannels() const;
+		bool getQuitFlag() const;
+		 void setQuitFlag(bool flag);
 };
 
 #endif

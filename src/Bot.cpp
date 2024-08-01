@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:35 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 10:06:12 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 10:06:00 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,18 @@ std::string Server::_channelInfo(const std::string& channelName, int i) const
 {
     std::map<std::string, Channel*>::const_iterator it = this->_allChannels.find(channelName);
     if (it != this->_allChannels.end()) 
-	{
+    {
         std::map<int, Client*>::const_iterator clientIt = this->_clients.find(i);
         if (clientIt != this->_clients.end() && clientIt->second->isJoined(channelName)) 
-		{
+        {
             std::ostringstream info;
             info << "Channel Name: " << it->second->getName() << "\n";
-            info << "Channel Creator: " << it->second->getCreator()->getNickName() << "\n";
             info << "Online Users: " << it->second->getOnlineUsers() << "\n";
             info << "Channel Topic: " << it->second->getTopic() << "\n";
             return info.str();
         } 
-		else 
-		{
+        else 
+        {
             return "You need to join the channel first\n";
         }
     }
@@ -114,9 +113,9 @@ std::string Server::_listAllChannels() const
     std::ostringstream channels;
     channels << YELLOW << "┌───────────────────────────────────────────────────────────────────────────────────┐\n";
     channels << "│                             CHANNELS LIST IN THE SERVER                            │\n";
-    channels << "├──────────────┬──────────────┬────────────────────┬────────────────────────────────┤\n";
-    channels << "│ Channel Name │ Online Users │ Creator Of Channel │ Channel Topic                   │\n";
-    channels << "├──────────────┼──────────────┼────────────────────┼────────────────────────────────┤\n";
+    channels << "├──────────────┬──────────────┬─────────────────────────────────────────────────────┤\n";
+    channels << "│ Channel Name │ Online Users │ Channel Topic                                        │\n";
+    channels << "├──────────────┼──────────────┼─────────────────────────────────────────────────────┤\n";
 
     std::map<std::string, Channel*>::const_iterator it = this->_allChannels.begin();
     while (it != this->_allChannels.end()) 
@@ -126,14 +125,13 @@ std::string Server::_listAllChannels() const
         {
             channels << "│ " << fillIt(it->first, 12) << " │ "
                      << fillIt(to_string(channel->getOnlineUsers()), 12) << " │ "
-                     << fillIt(channel->getCreator() ? channel->getCreator()->getNickName() : "Unknown", 18) << " │ "
-                     << fillIt(channel->getTopic(), 32) << " │\n";
+                     << fillIt(channel->getTopic(), 44) << " │\n";
         }
         it++;
     }
 
     if (this->_allChannels.empty()) 
-	{
+    {
         channels << "│                                                                                   │\n";
         channels << "│                                NO CHANNEL IN THE SERVER                            │\n";
         channels << "│                                                                                   │\n";
@@ -144,4 +142,3 @@ std::string Server::_listAllChannels() const
 
     return channels.str();
 }
-

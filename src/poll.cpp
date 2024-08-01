@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:28:00 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 08:15:03 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 10:00:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ void Server::_removeFromPoll(int index)
     std::map<int, Client*>::iterator it = this->_clients.find(fd_to_remove);
     if (it != this->_clients.end()) 
     {
+        if (!it->second->getQuitFlag())  // Check if QUIT command was not used
+        {
+            it->second->leaveAllChannels();  // Leave channels if not using QUIT
+        }
         std::string nickname = it->second->getNickName();
         if (!nickname.empty()) 
         {

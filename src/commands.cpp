@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 08:26:31 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 10:00:07 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,6 +387,7 @@ std::string Server::_quit(Request request, int i)
     if (!nickname.empty()) {
         this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
     }
+    this->_clients[i]->setQuitFlag(true);
     close(this->_clients[i]->getClientfd());
     _removeFromPoll(i -3);
     return ("QUIT");

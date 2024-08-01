@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:09:13 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 09:04:33 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 09:50:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ std::string Channel::listAllUsers() const
 
 bool Channel::isEmpty() const 
 {
-    return this->_members.empty();
+    return _members.empty() && _operators.empty() && _voice.empty();
 }
 
 bool Channel::isOperator(Client* member) const 
