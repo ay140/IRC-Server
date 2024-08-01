@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:56:23 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 07:48:29 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 07:53:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #define BADCHANMASK 9
 #define USERNOTINCHANNEL -1
 #define USERNOTFOUND -1
+#define CHANNELISINVITEONLY 10
 
 #include "Server.hpp"
 

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:26:27 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/07/31 08:14:07 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/01 07:54:40 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,10 @@ std::string Server::_joinChannel(Request request, int fd)
         {
             return _printMessage("403", this->_clients[fd]->getNickName(), *itChannels + " :No such channel");
         }
+        else if (result == CHANNELISINVITEONLY)
+        {
+            return _printMessage("473", this->_clients[fd]->getNickName(), *itChannels + " :Cannot join channel (+i) - Invite-only channel");
+        }
         else if (!this->_clients[fd]->isJoined(*itChannels))
         {
             return _printMessage("999", this->_clients[fd]->getNickName(), *itChannels + " :Failed to join channel");
@@ -113,6 +117,10 @@ int Server::_createChannel(const std::string& channelName, int creatorFd)
     } 
 	else 
 	{
+        if (it->second->getInviteOnly()) 
+		{
+            return CHANNELISINVITEONLY;
+        }
         if (it->second->getKey().empty()) 
 		{
             int result = 0;
@@ -163,6 +171,11 @@ int Server::_createPrvChannel(const std::string& channelName, const std::string&
     } 
 	else 
 	{
+        if (it->second->getInviteOnly()) 
+		{
+            return CHANNELISINVITEONLY;
+        }
+
         if (it->second->getKey().empty())
         {
             if (channelKey.empty()) 
