@@ -14,6 +14,17 @@
 
 Server* server_instance = NULL;
 
+bool isValidDigitOnlyPassword(const std::string& password) 
+{
+    for (std::string::size_type i = 0; i < password.length(); ++i) 
+    {
+        if (!isdigit(password[i])) 
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 int main(int ac, char **av)
 {
@@ -32,6 +43,12 @@ int main(int ac, char **av)
         }
 
         std::cout << "Using port: " << port << std::endl;
+        
+        std::string password = av[2];
+        if (!isValidDigitOnlyPassword(password)) 
+        {
+            throw std::runtime_error("Invalid password. Password must contain digits only.");
+        }
     } 
     catch (const std::exception &e) 
     {
