@@ -129,5 +129,19 @@ The IRC server supports the following commands:
     ```
 4. **Connect to the server using an IRC client.**
 
+### Installing Irssi
+
+Irssi is a popular command-line IRC client that you can use to connect to this IRC server.
+
+- On Ubuntu or Debian-based systems, use the following command:
+  ```sh
+  sudo apt install irssi
+      ```
+On macOS, especially for users at 42 schools using Homebrew, use:
+  ```sh
+brew install irssi
+```
+
+
 ## Contact
 For any inquiries or issues, please contact amarzouk@student.42abudhabi.ae.
