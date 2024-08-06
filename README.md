@@ -22,7 +22,6 @@ The IRC server supports the following commands:
 - `TOPIC`: Change or view the topic of a channel.
 - `KICK`: Eject a user from a channel.
 - `PART`: Leave a channel.
-- `QUIT`: Quit the IRC server.
 - `SENDFILE`: Send a file to a user.
 - `GETFILE`: Receive a file from a user.
 - `BOT`: Interact with a bot.
@@ -88,10 +87,6 @@ The IRC server supports the following commands:
 ### PART
 - Usage: `PART <channel>`
 - Leaves a channel.
-
-### QUIT
-- Usage: `QUIT [<message>]`
-- Quits the IRC server with an optional message.
 
 ### SENDFILE
 - Usage: `SENDFILE <filename> <target>`

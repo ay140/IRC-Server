@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:10:20 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 10:00:07 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/06 10:54:19 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ std::string Server::_parsing(const std::string& message, int i)
         return _kick(request, i);
     else if (request.command == "PART")
         return _part(request, i);
-    else if (request.command == "QUIT")
-        return _quit(request, i);
     else if (request.command == "SENDFILE")
         return _sendFile(request, i);
     else if (request.command == "GETFILE")
@@ -367,32 +365,6 @@ std::string Server::_setUserName(Request request, int i)
     }
     return "";
 }
-
-std::string Server::_quit(Request request, int i) 
-{
-    std::string ret = this->_clients[i]->getUserPrefix() + "QUIT ";
-    if (request.args.size())
-        ret.append(":" + request.args[0] + "\n");
-    else
-        ret.append("\n");
-    std::map<std::string, Channel *> channels = this->_clients[i]->getJoinedChannels();
-    std::map<std::string, Channel *>::iterator it = channels.begin();
-    while (it != channels.end()) 
-    {
-        _sendToAllUsers(it->second, i, ret);
-        it++;
-    }
-    this->_clients[i]->leaveAllChannels();
-    std::string nickname = this->_clients[i]->getNickName();
-    if (!nickname.empty()) {
-        this->_clientNicknames.erase(std::remove(this->_clientNicknames.begin(), this->_clientNicknames.end(), nickname), this->_clientNicknames.end());
-    }
-    this->_clients[i]->setQuitFlag(true);
-    close(this->_clients[i]->getClientfd());
-    _removeFromPoll(i -3);
-    return ("QUIT");
-}
-
 
 std::string Server::_printHelpInfo() 
 {

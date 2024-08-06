@@ -1,28 +1,12 @@
-for i in {1..100}; do ./test.sh & done
-
 valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6661 1
 
 ps aux | grep ircserv
 
 lsof -p 13343
 
-
+irssi 
 
 /connect localhost 6661
 /quote PASS 
-
 /window next
 /window prev
-
-
-PASS
-NICK -> 1 arg 
-USER -> 4 args
-OPER -> 2 args 
-HELP
-MODE -> 2 args -> MODE username mode ex: a i w r o 0 s
-
-SENDFILE ay /Users/ayman_marzouk/Desktop/test.txt /tmp/test.txt
-GETFILE test.txt /Users/ayman_marzouk/Downloads
-
-TODO: try to delete the channels once its empty.

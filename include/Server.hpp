@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: amarzouk <amarzouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 10:58:52 by amarzouk          #+#    #+#             */
-/*   Updated: 2024/08/01 09:22:41 by codespace        ###   ########.fr       */
+/*   Updated: 2024/08/06 10:54:37 by amarzouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ class Server
 		std::string						_topic(Request request, int i);
 		std::string						_printUserModes(std::string ret, int i);
 		bool							_validMode(Request request);
-		std::string						_quit(Request request, int i);
 		std::string _handleWHOIS(Request request, int i);
 		std::string _handlePING(Request request, int i);
 		std::string _handleCAP(Request request, int i);
