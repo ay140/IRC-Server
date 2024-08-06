@@ -136,7 +136,8 @@ Irssi is a popular command-line IRC client that you can use to connect to this I
 - On Ubuntu or Debian-based systems, use the following command:
   ```sh
   sudo apt install irssi
-      ```
+    ```
+
 On macOS, especially for users at 42 schools using Homebrew, use:
   ```sh
 brew install irssi
