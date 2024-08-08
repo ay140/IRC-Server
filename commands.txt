@@ -3,7 +3,7 @@ valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6661 1
 ps aux | grep ircserv
 
 lsof -p 13343
-
+lsof -i -P -n| grep LISTEN
 irssi 
 
 /connect localhost 6661
